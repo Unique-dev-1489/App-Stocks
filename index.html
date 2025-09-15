@@ -1,235 +1,203 @@
-<!DOCTYPE html><html lang="hi">
+<!DOCTYPE html>
+<html lang="hi">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>App Stocks</title><!-- Google Fonts -->
-     <link rel="icon" href="https://i.postimg.cc/8CZsDhGS/Untitled-design-7.png" type="image/png">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
-
-<!-- Firebase SDKs -->
-<script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
-<script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js"></script>
-
-<!-- Particles.js CDN -->
-<script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
-
-<style>
-    #particles-js {
-        position: fixed;
-        width: 100%;
-        height: 100%;
-        background-color: #0f0f0f;
-        z-index: -1;
-    }
-
-    :root {
-        --primary-color: #1a1a1a;
-        --secondary-color: #2a2a2a;
-        --text-color: #f0f0f0;
-        --accent-gradient: linear-gradient(90deg, #4f46e5, #c026d3);
-        --shadow-color: rgba(0, 0, 0, 0.4);
-    }
-
-    * {
-        margin: 0;
-        padding: 0;
-        box-sizing: border-box;
-    }
-
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
+  <title>App Stocks</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet"/>
+  <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
+  <style>
     body {
-        font-family: 'Poppins', sans-serif;
-        background-color: var(--primary-color);
-        color: var(--text-color);
-        line-height: 1.6;
-        position: relative;
-        z-index: 1;
+      margin: 0;
+      font-family: 'Poppins', sans-serif;
+      background-color: #111;
+      color: #fff;
+      -ms-content-zooming: none;
+      touch-action: manipulation;
+      overscroll-behavior: none;
     }
-
-    .container {
-        max-width: 1200px;
-        margin: 0 auto;
-        padding: 2rem 1rem;
+    html, body {
+      touch-action: manipulation;
     }
-
-    header {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        flex-wrap: wrap;
-        gap: 1.5rem;
-        margin-bottom: 3rem;
+    #particles-js {
+      position: fixed;
+      width: 100%;
+      height: 100%;
+      z-index: -1;
     }
-
+    .header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1rem;
+      background: #1f1f1f;
+    }
     .store-title {
-        font-size: 2.5rem;
-        font-weight: 700;
-        background: var(--accent-gradient);
-        -webkit-background-clip: text;
-        background-clip: text;
-        color: transparent;
+      font-size: 1.8rem;
+      background: linear-gradient(80deg, #4f46e5, #c026d3);
+      -webkit-background-clip: text;
+      color: transparent;
+      font-weight: 700;
     }
-
-    .search-container {
-        position: relative;
-        width: 100%;
-        max-width: 400px;
+    .icons {
+      display: flex;
+      gap: 1rem;
+      position: relative;
     }
-
+    .icon {
+      cursor: pointer;
+      font-size: 1.5rem;
+      position: relative;
+    }
+    #notif-dot {
+      display: none;
+      position: absolute;
+      top: 0;
+      right: 0;
+      width: 10px;
+      height: 10px;
+      background: red;
+      border-radius: 50%;
+    }
+    .dropdown-menu {
+      display: none;
+      flex-direction: column;
+      background: #222;
+      position: absolute;
+      top: 60px;
+      right: 1rem;
+      padding: 0.5rem;
+      border-radius: 8px;
+      z-index: 100;
+    }
+    .dropdown-menu a {
+      color: #ccc;
+      text-decoration: none;
+      margin-bottom: 0.5rem;
+    }
+    .container {
+      max-width: 1000px;
+      margin: auto;
+      padding: 2rem 1rem;
+    }
+    .search-bar {
+      margin-bottom: 1.5rem;
+      display: flex;
+      justify-content: center;
+    }
+    .search-bar-inner {
+      display: flex;
+      background: #333;
+      border-radius: 50px;
+      padding: 0.2rem;
+      width: 100%;
+      max-width: 600px;
+    }
     #searchInput {
-        width: 100%;
-        padding: 0.8rem 1rem 0.8rem 2.5rem;
-        background-color: var(--secondary-color);
-        border: 1px solid #444;
-        border-radius: 50px;
-        color: var(--text-color);
-        font-size: 1rem;
-        transition: all 0.3s ease;
+      flex: 1;
+      border: none;
+      border-radius: 50px 0 0 50px;
+      padding: 0.8rem;
+      background: transparent;
+      color: #fff;
+      outline: none;
     }
-
-    #searchInput:focus {
-        outline: none;
-        border-color: #6a4de8;
-        box-shadow: 0 0 15px rgba(106, 77, 232, 0.3);
+    #categorySelect {
+      border: none;
+      background: transparent;
+      color: #fff;
+      padding: 0 1rem;
+      border-radius: 0 50px 50px 0;
+      outline: none;
     }
-
-    .search-container::before {
-        content: '🔍';
-        position: absolute;
-        left: 1rem;
-        top: 50%;
-        transform: translateY(-50%);
-        opacity: 0.6;
-    }
-
-    #message-area {
-        text-align: center;
-        font-size: 1.2rem;
-        color: #888;
-        margin-top: 4rem;
-    }
-
     #app-grid {
-        display: grid;
-        grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
-        gap: 1.5rem;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(90px, 1fr));
+      gap: 12px;
+      justify-items: center;
     }
-
     .app-card {
-        background-color: var(--secondary-color);
-        border-radius: 15px;
-        overflow: hidden;
-        text-align: center;
-        box-shadow: 0 8px 20px var(--shadow-color);
-        transition: transform 0.3s ease, box-shadow 0.3s ease;
-        display: flex;
-        flex-direction: column;
-        justify-content: space-between;
-        padding: 1.5rem 1rem;
+      background: #1e1e1e;
+      padding: 1rem;
+      border-radius: 10px;
+      text-align: center;
+      width: 100%;
+      max-width: 120px;
+      transition: transform 0.3s ease;
     }
-
     .app-card:hover {
-        transform: translateY(-8px);
-        box-shadow: 0 12px 25px rgba(0, 0, 0, 0.6);
+      transform: scale(1.03);
     }
-
-    .app-info {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        gap: 0.5rem;
-    }
-
     .app-logo {
-        width: 100px;
-        height: 100px;
-        object-fit: cover;
-        border-radius: 25px;
-        border: 3px solid #333;
+      width: 100px;
+      height: 100px;
+      object-fit: cover;
+      border-radius: 10px;
+      margin-bottom: 8px;
     }
-
-    .app-name {
-        font-size: 1.2rem;
-        font-weight: 600;
-        margin-top: 0.5rem;
+    .app-card h3 {
+      font-size: 1rem;
+      margin: 0.5rem 0 0.2rem;
     }
-
-    .app-version {
-        font-size: 0.9rem;
-        color: #ccc;
+    .app-card p {
+      font-size: 0.8rem;
+      color: #aaa;
+      margin: 0;
     }
-
     .download-btn {
-        display: inline-block;
-        text-decoration: none;
-        color: white;
-        background: var(--accent-gradient);
-        padding: 0.7rem 1.5rem;
-        border-radius: 50px;
-        font-weight: 600;
-        margin-top: 1rem;
-        transition: transform 0.2s ease, box-shadow 0.2s ease;
+      display: inline-block;
+      margin-top: 0.5rem;
+      padding: 0.4rem 0.9rem;
+      font-size: 0.75rem;
+      background: linear-gradient(90deg, #4f46e5, #c026d3);
+      color: white;
+      text-decoration: none;
+      border-radius: 25px;
     }
-
-    .download-btn:hover {
-        transform: scale(1.05);
-        box-shadow: 0 0 20px rgba(192, 38, 211, 0.4);
-    }
-
-    footer {
-        text-align: center;
-        padding: 2rem 1rem;
-        margin-top: 3rem;
-        color: #777;
-        border-top: 1px solid #333;
-    }
-
-    @media (max-width: 600px) {
-        header {
-            flex-direction: column;
-            align-items: flex-start;
-        }
-        .store-title {
-            font-size: 2rem;
-        }
-        .search-container {
-            max-width: 100%;
-        }
-        #app-grid {
-            grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
-        }
-        .app-logo {
-            width: 80px;
-            height: 80px;
-        }
-        .app-name {
-            font-size: 1rem;
-        }
-    }
-</style>
-
+  </style>
 </head>
-<body>
-    <div id="particles-js"></div>
-    <div class="container">
-        <header>
-            <h1 class="store-title">App Stocks</h1>
-            <div class="search-container">
-                <input type="search" id="searchInput" placeholder="Search for apps...">
-            </div>
-        </header><main>
-        <div id="message-area">Loading Apps...</div>
-        <div id="app-grid"></div>
-    </main>
+<body ongesturestart="event.preventDefault()" ongesturechange="event.preventDefault()" ongestureend="event.preventDefault()">
+  <div id="particles-js"></div>
+  <div class="header">
+    <div class="store-title">App Stocks</div>
+    <div class="icons">
+      <div class="icon" onclick="toggleMenu()">☰</div>
+      <div class="icon" onclick="goToNotifications()">🔔<span id="notif-dot"></span></div>
+    </div>
+  </div>
+  <div class="dropdown-menu" id="dropdownMenu">
+    <a href="https://t.me/uniquedev_bot" target="_blank">Telegram bot</a>
+    <a href="https://youtube.com/@uniquedevoloper" target="_blank">YouTube</a>
+  </div>
+  <div class="container">
+    <div class="search-bar">
+      <div class="search-bar-inner">
+        <input type="text" id="searchInput" placeholder="Search">
+        <select id="categorySelect" onchange="filterByCategory()">
+          <option value="All">All</option>
+        </select>
+      </div>
+    </div>
+    <div id="app-grid"></div>
+  </div>
+  <script>
+    // Disable zoom via Ctrl+ and pinch
+    document.addEventListener('keydown', function(e) {
+      if ((e.ctrlKey || e.metaKey) && (e.key === '+' || e.key === '-' || e.key === '=')) {
+        e.preventDefault();
+      }
+    });
+    document.addEventListener('wheel', function(e) {
+      if (e.ctrlKey) {
+        e.preventDefault();
+      }
+    }, { passive: false });
 
-    <footer>
-        <p>© 2025 This App Store. All rights reserved.</p>
-    </footer>
-</div>
-
-<script>
-    const firebaseConfig = {
+const firebaseConfig = {
   apiKey: "AIzaSyCyeCIbVLKxlG8ZnD7Pgd0396IMpAPGpqE",
   authDomain: "app-store-stocks.firebaseapp.com",
   databaseURL: "https://app-store-stocks-default-rtdb.firebaseio.com",
@@ -241,93 +209,82 @@
 };
     firebase.initializeApp(firebaseConfig);
     const db = firebase.firestore();
-
-    const appGrid = document.getElementById('app-grid');
-    const searchInput = document.getElementById('searchInput');
-    const messageArea = document.getElementById('message-area');
+    const appGrid = document.getElementById("app-grid");
+    const searchInput = document.getElementById("searchInput");
+    const categorySelect = document.getElementById("categorySelect");
     let allApps = [];
 
-    db.collection('apps').onSnapshot(snapshot => {
-        allApps = [];
-        if (snapshot.empty) {
-            messageArea.textContent = 'No apps available right now. Check back later!';
-            appGrid.innerHTML = '';
-            return;
-        }
-
-        snapshot.forEach(doc => {
-            const appData = doc.data();
-            allApps.push({
-                id: doc.id,
-                name: appData.name,
-                logoUrl: appData.logoUrl,
-                downloadLink: appData.downloadLink,
-                version: appData.version || 'v1.0'
-            });
-        });
-
-        messageArea.style.display = 'none';
-        displayApps(allApps);
-    }, error => {
-        console.error("Error fetching apps: ", error);
-        messageArea.textContent = 'Failed to load apps. Please check your connection or Firebase setup.';
+    db.collection("apps").onSnapshot(snapshot => {
+      allApps = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+      displayApps(allApps);
     });
 
-    function displayApps(appsToDisplay) {
-        appGrid.innerHTML = '';
-        if (appsToDisplay.length === 0) {
-            messageArea.textContent = 'No apps found for your search.';
-            messageArea.style.display = 'block';
-            return;
-        }
+    db.collection("categories").onSnapshot(snapshot => {
+      categorySelect.innerHTML = '<option value="All">All</option>';
+      snapshot.forEach(doc => {
+        const category = doc.data().name;
+        categorySelect.innerHTML += `<option value="${category}">${category}</option>`;
+      });
+    });
 
-        messageArea.style.display = 'none';
-
-        appsToDisplay.forEach(app => {
-            const appCardHTML = `
-                <div class="app-card" data-id="${app.id}">
-                    <div class="app-info">
-                        <img src="${app.logoUrl}" alt="${app.name} Logo" class="app-logo">
-                        <h3 class="app-name">${app.name}</h3>
-                        <p class="app-version">Version: ${app.version}</p>
-                    </div>
-                    <a href="${app.downloadLink}" class="download-btn" target="_blank" rel="noopener noreferrer">Download</a>
-                </div>
-            `;
-            appGrid.innerHTML += appCardHTML;
-        });
+    function displayApps(apps) {
+      appGrid.innerHTML = "";
+      apps.forEach(app => {
+        appGrid.innerHTML += `
+          <div class="app-card">
+            <img src="${app.logoUrl}" class="app-logo" alt="${app.name}" />
+            <h3>${app.name}</h3>
+            <p>Version: ${app.version}</p>
+            <a href="app.html?id=${app.id}" class="download-btn">Download</a>
+          </div>`;
+      });
     }
 
-    searchInput.addEventListener('input', (e) => {
-        const searchTerm = e.target.value.toLowerCase().trim();
-        const filteredApps = allApps.filter(app => app.name.toLowerCase().includes(searchTerm));
-        displayApps(filteredApps);
-    });
+    searchInput.addEventListener("input", () => filterByCategory());
+
+    function filterByCategory() {
+      const category = categorySelect.value;
+      const keyword = searchInput.value.toLowerCase();
+      const filtered = allApps.filter(app => {
+        const matchCategory = category === "All" || app.category === category;
+        const matchKeyword = app.name.toLowerCase().includes(keyword);
+        return matchCategory && matchKeyword;
+      });
+      displayApps(filtered);
+    }
+
+    function toggleMenu() {
+      const dropdownMenu = document.getElementById("dropdownMenu");
+      dropdownMenu.style.display = dropdownMenu.style.display === "flex" ? "none" : "flex";
+    }
+
+    function goToNotifications() {
+      window.location.href = "notifications.html";
+    }
 
     particlesJS("particles-js", {
-        particles: {
-            number: { value: 80, density: { enable: true, value_area: 800 } },
-            color: { value: "#00ff00" },
-            shape: { type: "circle" },
-            opacity: { value: 0.3 },
-            size: { value: 2 },
-            line_linked: {
-                enable: true,
-                distance: 150,
-                color: "#00ff00",
-                opacity: 0.2,
-                width: 1
-            },
-            move: { enable: true, speed: 1 }
+      particles: {
+        number: { value: 50, density: { enable: true, value_area: 800 } },
+        color: { value: "#00ff00" },
+        shape: { type: "circle" },
+        opacity: { value: 0.3 },
+        size: { value: 3 },
+        line_linked: {
+          enable: true,
+          distance: 150,
+          color: "#00ff00",
+          opacity: 0.2,
+          width: 1
         },
-        interactivity: {
-            events: {
-                onhover: { enable: true, mode: "repulse" }
-            }
-        },
-        retina_detect: true
+        move: { enable: true, speed: 1 }
+      },
+      interactivity: {
+        events: {
+          onhover: { enable: true, mode: "repulse" }
+        }
+      },
+      retina_detect: true
     });
-</script>
-
+  </script>
 </body>
 </html>

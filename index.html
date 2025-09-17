@@ -52,13 +52,51 @@
         padding: 2rem 1rem;
     }
 
-    header {
+    .header {
         display: flex;
         justify-content: space-between;
         align-items: center;
         flex-wrap: wrap;
         gap: 1.5rem;
         margin-bottom: 3rem;
+    }
+
+ .icons {
+      display: flex;
+      gap: 1rem;
+      position: relative;
+    }
+    .icon {
+      cursor: pointer;
+      font-size: 1.5rem;
+      position: relative;
+    }
+
+    #notif-dot {
+      display: none;
+      position: absolute;
+      top: 0;
+      right: 0;
+      width: 10px;
+      height: 10px;
+      background: red;
+      border-radius: 50%;
+    }
+    .dropdown-menu {
+      display: none;
+      flex-direction: column;
+      background: #222;
+      position: absolute;
+      top: 60px;
+      right: 6rem;
+      padding: 0.5rem;
+      border-radius: 8px;
+      z-index: 100;
+    }
+    .dropdown-menu a {
+      color: #ccc;
+      text-decoration: none;
+      margin-bottom: 0.5rem;
     }
 
     .store-title {
@@ -209,14 +247,24 @@
 </style>
 
 </head>
-<body>
+<body ongesturestart="event.preventDefault()" ongesturechange="event.preventDefault()" ongestureend="event.preventDefault()">
     <div id="particles-js"></div>
     <div class="container">
         <header>
-            <h1 class="store-title">App Stocks</h1>
+  <div class="header">
+    <div class="store-title">App Stocks</div>
+   <div class="icons">
+      <div class="icon" onclick="toggleMenu()">☰</div>
+      <div class="icon" onclick="goToNotifications()">🔔<span id="notif-dot"></span></div>
+    </div>
+  </div>
+  <div class="dropdown-menu" id="dropdownMenu">
+    <a href="https://t.me/uniquedev_bot" target="_blank">Telegram</a>
+    <a href="https://www.youtube.com/@uniquedevoloper" target="_blank">YouTube</a>
+    </div>
             <div class="search-container">
                 <input type="search" id="searchInput" placeholder="Search for apps...">
-            </div>
+            </div><br>
         </header><main>
         <div id="message-area">Loading Apps...</div>
         <div id="app-grid"></div>
@@ -302,7 +350,14 @@
         const filteredApps = allApps.filter(app => app.name.toLowerCase().includes(searchTerm));
         displayApps(filteredApps);
     });
+function toggleMenu() {
+      const dropdownMenu = document.getElementById("dropdownMenu");
+      dropdownMenu.style.display = dropdownMenu.style.display === "flex" ? "none" : "flex";
+    }
 
+    function goToNotifications() {
+      window.location.href = "notifications.html";
+    }
     particlesJS("particles-js", {
         particles: {
             number: { value: 80, density: { enable: true, value_area: 800 } },

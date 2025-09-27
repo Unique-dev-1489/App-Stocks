@@ -332,6 +332,8 @@
             <button id="profile-btn" class="btn btn-outline">Profile</button>
             <button id="submit-btn" class="btn btn-primary">Submit App</button>
             <button id="logout-btn" class="btn btn-outline" style="display: none;">Logout</button>
+<!-- 🔔 Notification Button -->
+        <button id="notification-btn" class="btn btn-outline">🔔</button>
         </div>
     </header>
 
@@ -429,7 +431,7 @@
     
     <script>
     // --- FIREBASE CONFIGURATION ---
-    const firebaseConfig = {
+  const firebaseConfig = {
   apiKey: "AIzaSyCyeCIbVLKxlG8ZnD7Pgd0396IMpAPGpqE",
   authDomain: "app-store-stocks.firebaseapp.com",
   databaseURL: "https://app-store-stocks-default-rtdb.firebaseio.com",
@@ -439,6 +441,7 @@
   appId: "1:1066420357396:web:99348a13f243bfb5601a01"
 
 };
+
 
     // Initialize Firebase
     firebase.initializeApp(firebaseConfig);
@@ -514,6 +517,12 @@
         showToast('You have been logged out.');
     }
     
+// Notification button redirect
+document.getElementById('notification-btn').addEventListener('click', () => {
+    window.location.href = 'notifications.html';
+});
+
+
     // --- NOTIFICATIONS ---
     function listenForNotifications() {
         if (!userProfile) return;

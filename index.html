@@ -237,6 +237,25 @@
             gap: 5px;
         }
         .stars { color: var(--neon-gold); }
+        
+        /* Share button styles */
+        .item-card-actions {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 10px;
+        }
+        .share-btn {
+            background: none;
+            border: none;
+            color: var(--neon-cyan);
+            cursor: pointer;
+            font-size: 1.2rem;
+            transition: all 0.3s;
+        }
+        .share-btn:hover {
+            color: var(--neon-magenta);
+            transform: scale(1.2);
+        }
 
         /* --- Modals --- */
         .modal {
@@ -599,9 +618,27 @@ document.getElementById('notification-btn').addEventListener('click', () => {
                         <span class="stars">★★★★★</span>
                         <span>${avgRating} (${totalRatings} ratings)</span>
                     </div>
+                    <div class="item-card-actions">
+                        <button class="share-btn" data-id="${item.id}" title="Share this app">🔗</button>
+                    </div>
                 </div>
             `;
-            card.addEventListener('click', () => showItemDetails(item.id));
+            
+            // Add event listeners
+            card.addEventListener('click', (e) => {
+                // Don't open details if share button was clicked
+                if (!e.target.classList.contains('share-btn')) {
+                    showItemDetails(item.id);
+                }
+            });
+            
+            // Share button event listener
+            const shareBtn = card.querySelector('.share-btn');
+            shareBtn.addEventListener('click', (e) => {
+                e.stopPropagation(); // Prevent card click event
+                shareItem(item.id);
+            });
+            
             DOM.itemsGrid.appendChild(card);
         });
     }
@@ -610,6 +647,27 @@ document.getElementById('notification-btn').addEventListener('click', () => {
         database.ref('items').on('value', (snapshot) => {
             allItems = snapshot.val() || {};
             renderItems();
+        });
+    }
+
+    // --- SHARE FUNCTIONALITY ---
+    function shareItem(itemId) {
+        // Generate shareable URL with item ID
+        const baseUrl = window.location.origin + window.location.pathname;
+        const shareableUrl = `${baseUrl}?item=${itemId}`;
+        
+        // Copy to clipboard
+        navigator.clipboard.writeText(shareableUrl).then(() => {
+            showToast('Link copied to clipboard!');
+        }).catch(err => {
+            // Fallback for older browsers
+            const textArea = document.createElement('textarea');
+            textArea.value = shareableUrl;
+            document.body.appendChild(textArea);
+            textArea.select();
+            document.execCommand('copy');
+            document.body.removeChild(textArea);
+            showToast('Link copied to clipboard!');
         });
     }
 
@@ -657,6 +715,13 @@ document.getElementById('notification-btn').addEventListener('click', () => {
             actionContainer.innerHTML = `<a href="${item.downloadLink}" target="_blank" class="btn btn-primary">Download</a>`;
         }
         actionContainer.innerHTML += `<button class="btn btn-outline" id="update-request-btn" data-id="${itemId}" style="margin-left:10px;">Request Update</button>`;
+        actionContainer.innerHTML += `<button class="btn btn-outline" id="share-details-btn" data-id="${itemId}" style="margin-left:10px;">Share</button>`;
+        
+        // Share button in details modal
+        detailsContent.querySelector('#share-details-btn').onclick = () => {
+            shareItem(itemId);
+        };
+        
         detailsContent.querySelector('#update-request-btn').onclick = () => openSubmissionFormForUpdate(itemId);
 
         renderReviewForm(itemId);
@@ -909,6 +974,21 @@ document.getElementById('notification-btn').addEventListener('click', () => {
     window.addEventListener('DOMContentLoaded', () => {
         checkUserProfile();
         loadItems();
+        
+        // Check for direct item link in URL
+        const urlParams = new URLSearchParams(window.location.search);
+        const itemId = urlParams.get('item');
+        if (itemId) {
+            // Load items first, then show the specific item
+            database.ref('items').once('value', (snapshot) => {
+                allItems = snapshot.val() || {};
+                if (allItems[itemId]) {
+                    showItemDetails(itemId);
+                } else {
+                    showToast('App not found', 'error');
+                }
+            });
+        }
         
         // Modal controls
         DOM.profileBtn.addEventListener('click', () => DOM.profileModal.classList.add('active'));

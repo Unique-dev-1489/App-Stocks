@@ -20,6 +20,9 @@
             --neon-magenta: #ff00ff;
             --neon-gold: #ffd700;
             --accent-gradient: linear-gradient(90deg, var(--neon-cyan), var(--neon-magenta));
+            --success-color: #28a745;
+            --warning-color: #ffc107;
+            --info-color: #17a2b8;
         }
 
         * {
@@ -161,7 +164,7 @@
             display: flex;
             gap: 20px;
             overflow-x: auto;
-            padding-bottom: 20px; /* For scrollbar */
+            padding-bottom: 20px;
         }
         .featured-carousel::-webkit-scrollbar {
              height: 8px;
@@ -198,7 +201,7 @@
         /* --- Item Cards --- */
         .items-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
             gap: 25px;
         }
 
@@ -238,6 +241,25 @@
         }
         .stars { color: var(--neon-gold); }
         
+        /* Status Badges */
+        .status-badge {
+            display: inline-block;
+            padding: 3px 10px;
+            border-radius: 12px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            margin-top: 8px;
+        }
+        .status-approved { background: var(--success-color); color: white; }
+        .status-pending { background: var(--warning-color); color: #333; }
+        .status-rejected { background: #dc3545; color: white; }
+        
+        .downloads-count {
+            font-size: 0.8rem;
+            color: var(--neon-cyan);
+            margin-top: 5px;
+        }
+
         /* Share button styles */
         .item-card-actions {
             display: flex;
@@ -302,6 +324,23 @@
             margin-top: 20px;
         }
 
+        /* --- My Submissions Section --- */
+        .my-submissions-section {
+            margin-bottom: 40px;
+        }
+        .submissions-list {
+            max-height: 400px;
+            overflow-y: auto;
+        }
+        .submission-item {
+            padding: 15px;
+            border-bottom: 1px solid var(--glass-border);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .submission-item:last-child { border-bottom: none; }
+
         /* --- Reviews Section --- */
         .reviews-section h3 { margin-top: 30px; }
         .review-form-stars span { font-size: 2rem; cursor: pointer; color: var(--text-muted); }
@@ -338,53 +377,98 @@
         }
         .toast.success { background: linear-gradient(90deg, #1d976c, #93f9b9); }
         .toast.error { background: linear-gradient(90deg, #cb2d3e, #ef473a); }
+        .toast.info { background: linear-gradient(90deg, #2193b0, #6dd5ed); }
 
+        /* Tabs */
+        .tabs {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+            border-bottom: 1px solid var(--glass-border);
+        }
+        .tab-btn {
+            background: none;
+            border: none;
+            padding: 10px 20px;
+            color: var(--text-muted);
+            cursor: pointer;
+            font-size: 1rem;
+        }
+        .tab-btn.active {
+            color: var(--neon-cyan);
+            border-bottom: 2px solid var(--neon-cyan);
+        }
+        .tab-content {
+            display: none;
+        }
+        .tab-content.active {
+            display: block;
+        }
     </style>
 </head>
 <body>
 
     <!-- Header -->
     <header class="app-header glass-panel">
-        <div class="logo">App Stocks</div>
+        <div class="logo">📱 App Stocks</div>
         <div class="header-actions">
             <span id="welcome-message" style="margin-right: 20px;"></span>
             <button id="profile-btn" class="btn btn-outline">Profile</button>
             <button id="submit-btn" class="btn btn-primary">Submit App</button>
             <button id="logout-btn" class="btn btn-outline" style="display: none;">Logout</button>
-<!-- 🔔 Notification Button -->
-        <button id="notification-btn" class="btn btn-outline">🔔</button>
+            <button id="notification-btn" class="btn btn-outline">🔔</button>
         </div>
     </header>
 
     <main class="container">
-        <!-- Featured Section -->
-        <section class="featured-section">
-            <h2>Featured</h2>
-            <div id="featured-carousel" class="featured-carousel">
-                <!-- Featured items will be injected here -->
-            </div>
-        </section>
-
-        <!-- Controls -->
-        <div class="controls-bar glass-panel">
-            <div class="filters">
-                <button data-filter="All" class="active">All</button>
-                <button data-filter="App">Apps</button>
-                <button data-filter="Game">Games</button>
-            </div>
-            <select id="sort-select" class="sort-select">
-                <option value="newest">Newest First</option>
-                <option value="top-rated">Top Rated</option>
-            </select>
-            <input type="text" id="search-bar" class="search-bar" placeholder="Search for apps or games...">
+        <!-- Tabs Navigation -->
+        <div class="tabs">
+            <button class="tab-btn active" data-tab="explore">Explore</button>
+            <button class="tab-btn" data-tab="my-submissions">My Submissions</button>
         </div>
 
-        <!-- Items Grid -->
-        <section>
-            <div id="items-grid" class="items-grid">
-                <!-- App/Game cards will be injected here -->
+        <!-- Explore Tab -->
+        <div id="explore-tab" class="tab-content active">
+            <!-- Featured Section -->
+            <section class="featured-section">
+                <h2>🔥 Featured</h2>
+                <div id="featured-carousel" class="featured-carousel">
+                    <!-- Featured items will be injected here -->
+                </div>
+            </section>
+
+            <!-- Controls -->
+            <div class="controls-bar glass-panel">
+                <div class="filters">
+                    <button data-filter="All" class="active">All</button>
+                    <button data-filter="App">Apps</button>
+                    <button data-filter="Game">Games</button>
+                </div>
+                <select id="sort-select" class="sort-select">
+                    <option value="newest">Newest First</option>
+                    <option value="top-rated">Top Rated</option>
+                    <option value="most-downloaded">Most Downloaded</option>
+                </select>
+                <input type="text" id="search-bar" class="search-bar" placeholder="Search for apps or games...">
             </div>
-        </section>
+
+            <!-- Items Grid -->
+            <section>
+                <div id="items-grid" class="items-grid">
+                    <!-- App/Game cards will be injected here -->
+                </div>
+            </section>
+        </div>
+
+        <!-- My Submissions Tab -->
+        <div id="my-submissions-tab" class="tab-content">
+            <div class="glass-panel">
+                <h2>📝 My Submissions</h2>
+                <div id="my-submissions-list" class="submissions-list">
+                    <!-- User's submissions will appear here -->
+                </div>
+            </div>
+        </div>
     </main>
     
     <!-- Toast Container -->
@@ -395,7 +479,7 @@
     <div id="profile-modal" class="modal">
         <div class="modal-content glass-panel">
             <span class="modal-close">&times;</span>
-            <h2>Your Profile</h2>
+            <h2>👤 Your Profile</h2>
             <p>A profile is needed to submit, review, and vote.</p>
             <form id="profile-form">
                 <input type="text" id="display-name" placeholder="Display Name" required>
@@ -409,7 +493,7 @@
     <div id="submission-modal" class="modal">
         <div class="modal-content glass-panel">
             <span class="modal-close">&times;</span>
-            <h2>Submit an App or Game</h2>
+            <h2>📤 Submit an App or Game</h2>
             <form id="submission-form">
                 <input type="text" id="submission-title" placeholder="Title" required>
                 <textarea id="submission-desc" placeholder="Description" rows="4" required></textarea>
@@ -420,6 +504,18 @@
                     <option value="App">App</option>
                     <option value="Game">Game</option>
                 </select>
+                
+                <!-- NEW: Version and Size fields -->
+                <input type="text" id="submission-version" placeholder="Version (e.g., 1.0.0)" required>
+                <div class="form-grid">
+                    <input type="number" id="submission-size-mb" placeholder="Size (MB)" step="0.1" required>
+                    <select id="submission-size-unit">
+                        <option value="MB">MB</option>
+                        <option value="GB">GB</option>
+                        <option value="KB">KB</option>
+                    </select>
+                </div>
+                
                 <select id="submission-content-type" required>
                     <option value="">Select Submission Type...</option>
                     <option value="embed">HTML Embed</option>
@@ -428,7 +524,7 @@
                 <textarea id="submission-embed-code" placeholder="Paste <iframe> or HTML code here" rows="5" style="display:none;"></textarea>
                 <input type="url" id="submission-download-link" placeholder="External Download URL" style="display:none;">
                 <input type="hidden" id="update-of-id">
-                <p>To request an update for your published app, find it in the list, click "Request Update" and fill this form.</p>
+                <p class="info-text">ℹ️ To request an update for your published app, go to My Submissions and click "Request Update".</p>
                 <button type="submit" class="btn btn-primary">Submit for Review</button>
             </form>
         </div>
@@ -444,23 +540,57 @@
         </div>
     </div>
 
+    <!-- Update Request Modal -->
+    <div id="update-request-modal" class="modal">
+        <div class="modal-content glass-panel">
+            <span class="modal-close">&times;</span>
+            <h2>🔄 Request Update</h2>
+            <form id="update-request-form">
+                <input type="hidden" id="update-item-id">
+                <input type="text" id="update-title" placeholder="Title" required>
+                <textarea id="update-description" placeholder="Description" rows="4" required></textarea>
+                <input type="url" id="update-logo" placeholder="Logo Image URL" required>
+                <input type="text" id="update-screenshots" placeholder="Screenshots (comma-separated URLs)">
+                <select id="update-type" required>
+                    <option value="">Select Type...</option>
+                    <option value="App">App</option>
+                    <option value="Game">Game</option>
+                </select>
+                <input type="text" id="update-version" placeholder="New Version" required>
+                <div class="form-grid">
+                    <input type="number" id="update-size-mb" placeholder="Size (MB)" step="0.1" required>
+                    <select id="update-size-unit">
+                        <option value="MB">MB</option>
+                        <option value="GB">GB</option>
+                        <option value="KB">KB</option>
+                    </select>
+                </div>
+                <select id="update-content-type" required>
+                    <option value="embed">HTML Embed</option>
+                    <option value="link">External Link</option>
+                </select>
+                <textarea id="update-embed-code" placeholder="HTML Embed Code" rows="5" style="display:none;"></textarea>
+                <input type="url" id="update-download-link" placeholder="Download URL" style="display:none;">
+                <button type="submit" class="btn btn-primary">Submit Update Request</button>
+            </form>
+        </div>
+    </div>
+
     <!-- Firebase SDK -->
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
     
     <script>
     // --- FIREBASE CONFIGURATION ---
-  const firebaseConfig = {
-  apiKey: "AIzaSyCyeCIbVLKxlG8ZnD7Pgd0396IMpAPGpqE",
-  authDomain: "app-store-stocks.firebaseapp.com",
-  databaseURL: "https://app-store-stocks-default-rtdb.firebaseio.com",
-  projectId: "app-store-stocks",
-  storageBucket: "app-store-stocks.firebasestorage.app",
-  messagingSenderId: "1066420357396",
-  appId: "1:1066420357396:web:99348a13f243bfb5601a01"
-
-};
-
+    const firebaseConfig = {
+        apiKey: "AIzaSyCyeCIbVLKxlG8ZnD7Pgd0396IMpAPGpqE",
+        authDomain: "app-store-stocks.firebaseapp.com",
+        databaseURL: "https://app-store-stocks-default-rtdb.firebaseio.com",
+        projectId: "app-store-stocks",
+        storageBucket: "app-store-stocks.firebasestorage.app",
+        messagingSenderId: "1066420357396",
+        appId: "1:1066420357396:web:99348a13f243bfb5601a01"
+    };
 
     // Initialize Firebase
     firebase.initializeApp(firebaseConfig);
@@ -469,6 +599,7 @@
     // --- GLOBAL STATE & DOM ELEMENTS ---
     let userProfile = null;
     let allItems = {};
+    let userSubmissions = {};
     let currentFilter = 'All';
     let currentSort = 'newest';
     let currentSearch = '';
@@ -483,14 +614,24 @@
         filterButtons: document.querySelectorAll('.filters button'),
         sortSelect: document.getElementById('sort-select'),
         searchBar: document.getElementById('search-bar'),
-        // Modals
         profileModal: document.getElementById('profile-modal'),
         submissionModal: document.getElementById('submission-modal'),
         itemDetailsModal: document.getElementById('item-details-modal'),
+        updateRequestModal: document.getElementById('update-request-modal'),
+        mySubmissionsList: document.getElementById('my-submissions-list'),
+        tabBtns: document.querySelectorAll('.tab-btn'),
+        tabContents: document.querySelectorAll('.tab-content')
     };
     
     // --- UTILITY FUNCTIONS ---
     const sanitizeEmail = (email) => email.replace(/[.#$[\]]/g, "_");
+    
+    const formatFileSize = (sizeMB, unit) => {
+        if (unit === 'GB') return `${sizeMB} GB`;
+        if (unit === 'KB') return `${sizeMB} KB`;
+        return `${sizeMB} MB`;
+    };
+
     const showToast = (message, type = 'success') => {
         const toastContainer = document.getElementById('toast-container');
         const toast = document.createElement('div');
@@ -508,6 +649,7 @@
             DOM.welcomeMessage.textContent = `Welcome, ${userProfile.displayName}!`;
             DOM.profileBtn.style.display = 'none';
             DOM.logoutBtn.style.display = 'inline-block';
+            loadUserSubmissions();
             listenForNotifications();
         } else {
             DOM.welcomeMessage.textContent = '';
@@ -535,12 +677,109 @@
         checkUserProfile();
         showToast('You have been logged out.');
     }
-    
-// Notification button redirect
-document.getElementById('notification-btn').addEventListener('click', () => {
-    window.location.href = 'notifications.html';
-});
 
+    // Load user's submissions from pendingSubmissions and published items
+    function loadUserSubmissions() {
+        if (!userProfile) return;
+        
+        const sanitizedEmail = sanitizeEmail(userProfile.email);
+        userSubmissions = {};
+        
+        // Load pending submissions
+        database.ref('pendingSubmissions').orderByChild('submitterEmail').equalTo(userProfile.email).on('value', (snapshot) => {
+            snapshot.forEach(child => {
+                userSubmissions[child.key] = {
+                    id: child.key,
+                    ...child.val(),
+                    status: 'pending'
+                };
+            });
+            renderUserSubmissions();
+        });
+        
+        // Load published items by this user
+        database.ref('items').orderByChild('publisherEmail').equalTo(userProfile.email).on('value', (snapshot) => {
+            snapshot.forEach(child => {
+                if (userSubmissions[child.key]) {
+                    userSubmissions[child.key].status = 'approved';
+                    userSubmissions[child.key].publishedData = child.val();
+                } else {
+                    userSubmissions[child.key] = {
+                        id: child.key,
+                        ...child.val(),
+                        status: 'approved',
+                        publishedData: child.val()
+                    };
+                }
+            });
+            renderUserSubmissions();
+        });
+    }
+
+    function renderUserSubmissions() {
+        if (!DOM.mySubmissionsList) return;
+        
+        DOM.mySubmissionsList.innerHTML = '';
+        const submissionsArray = Object.values(userSubmissions);
+        
+        if (submissionsArray.length === 0) {
+            DOM.mySubmissionsList.innerHTML = '<p style="padding: 15px; text-align: center;">No submissions yet. Click "Submit App" to get started!</p>';
+            return;
+        }
+        
+        submissionsArray.forEach(sub => {
+            const statusClass = sub.status === 'approved' ? 'status-approved' : (sub.status === 'rejected' ? 'status-rejected' : 'status-pending');
+            const statusText = sub.status === 'approved' ? '✓ Approved' : (sub.status === 'rejected' ? '✗ Rejected' : '⏳ Pending Review');
+            
+            const subDiv = document.createElement('div');
+            subDiv.className = 'submission-item';
+            subDiv.innerHTML = `
+                <div class="info">
+                    <strong>${sub.title}</strong><br>
+                    <small>Type: ${sub.type} | Version: ${sub.version || 'N/A'}</small><br>
+                    <span class="status-badge ${statusClass}">${statusText}</span>
+                    ${sub.status === 'approved' && sub.publishedData ? `<div class="downloads-count">📥 Downloads: ${sub.publishedData.downloads || 0}</div>` : ''}
+                </div>
+                <div class="actions">
+                    ${sub.status === 'approved' ? `<button class="btn btn-sm btn-outline request-update-btn" data-id="${sub.id}" data-title="${sub.title}" data-desc="${sub.description}" data-logo="${sub.logoUrl}" data-screenshots="${(sub.screenshots || []).join(',')}" data-type="${sub.type}" data-version="${sub.version || ''}" data-size-mb="${sub.sizeMB || ''}" data-size-unit="${sub.sizeUnit || 'MB'}" data-submission-type="${sub.submissionType}" data-embed-code="${sub.embedCode || ''}" data-download-link="${sub.downloadLink || ''}">🔄 Request Update</button>` : ''}
+                    ${sub.status === 'pending' ? `<button class="btn btn-sm btn-danger cancel-submission-btn" data-id="${sub.id}">❌ Cancel</button>` : ''}
+                </div>
+            `;
+            DOM.mySubmissionsList.appendChild(subDiv);
+        });
+        
+        // Add event listeners for update request buttons
+        document.querySelectorAll('.request-update-btn').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                openUpdateRequestModal({
+                    id: btn.dataset.id,
+                    title: btn.dataset.title,
+                    description: btn.dataset.desc,
+                    logoUrl: btn.dataset.logo,
+                    screenshots: btn.dataset.screenshots,
+                    type: btn.dataset.type,
+                    version: btn.dataset.version,
+                    sizeMB: btn.dataset.sizeMb,
+                    sizeUnit: btn.dataset.sizeUnit,
+                    submissionType: btn.dataset.submissionType,
+                    embedCode: btn.dataset.embedCode,
+                    downloadLink: btn.dataset.downloadLink
+                });
+            });
+        });
+        
+        // Add event listeners for cancel buttons
+        document.querySelectorAll('.cancel-submission-btn').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                if (confirm('Are you sure you want to cancel this submission?')) {
+                    database.ref(`pendingSubmissions/${btn.dataset.id}`).remove();
+                    showToast('Submission cancelled');
+                }
+            });
+        });
+    }
 
     // --- NOTIFICATIONS ---
     function listenForNotifications() {
@@ -551,11 +790,27 @@ document.getElementById('notification-btn').addEventListener('click', () => {
         notificationsRef.on('child_added', (snapshot) => {
             const notification = snapshot.val();
             if (!notification.seen) {
-                const message = `Your submission "${notification.title}" was ${notification.status}.`;
+                const message = notification.message || `Your submission "${notification.title}" was ${notification.status}.`;
                 showToast(message, notification.status === 'approved' ? 'success' : 'error');
                 notificationsRef.child(snapshot.key).update({ seen: true });
+                loadUserSubmissions(); // Refresh submissions list
             }
         });
+    }
+
+    // Track download clicks
+    function trackDownload(itemId) {
+        if (!itemId) return;
+        
+        const itemRef = database.ref(`items/${itemId}`);
+        itemRef.transaction(item => {
+            if (item) {
+                item.downloads = (item.downloads || 0) + 1;
+            }
+            return item;
+        });
+        
+        showToast('Download started!', 'info');
     }
 
     // --- CONTENT RENDERING ---
@@ -584,20 +839,23 @@ document.getElementById('notification-btn').addEventListener('click', () => {
                 return b.publishedAt - a.publishedAt;
             } else if (currentSort === 'top-rated') {
                 return (b.avgRating || 0) - (a.avgRating || 0);
+            } else if (currentSort === 'most-downloaded') {
+                return (b.downloads || 0) - (a.downloads || 0);
             }
             return 0;
         });
         
-        // Render Featured Carousel (from original unfiltered list)
+        // Render Featured Carousel
         Object.values(allItems).filter(item => item.isFeatured).forEach(item => {
              const featuredDiv = document.createElement('div');
              featuredDiv.className = 'featured-item';
-             featuredDiv.dataset.id = Object.keys(allItems).find(key => allItems[key] === item);
+             const itemId = Object.keys(allItems).find(key => allItems[key] === item);
+             featuredDiv.dataset.id = itemId;
              featuredDiv.innerHTML = `
                 <img src="${item.logoUrl}" alt="${item.title}">
                 <div class="overlay"><h3>${item.title}</h3></div>
              `;
-             featuredDiv.addEventListener('click', () => showItemDetails(featuredDiv.dataset.id));
+             featuredDiv.addEventListener('click', () => showItemDetails(itemId));
              DOM.featuredCarousel.appendChild(featuredDiv);
         });
 
@@ -608,6 +866,8 @@ document.getElementById('notification-btn').addEventListener('click', () => {
             card.dataset.id = item.id;
             const avgRating = item.avgRating ? item.avgRating.toFixed(1) : 'N/A';
             const totalRatings = item.totalRatings || 0;
+            const downloads = item.downloads || 0;
+            const sizeText = item.sizeMB ? formatFileSize(item.sizeMB, item.sizeUnit || 'MB') : 'Size N/A';
             
             card.innerHTML = `
                 <div class="item-card-logo" style="background-image: url('${item.logoUrl}')"></div>
@@ -618,24 +878,22 @@ document.getElementById('notification-btn').addEventListener('click', () => {
                         <span class="stars">★★★★★</span>
                         <span>${avgRating} (${totalRatings} ratings)</span>
                     </div>
+                    <div class="downloads-count">📥 ${downloads} downloads | 💾 ${sizeText}</div>
                     <div class="item-card-actions">
                         <button class="share-btn" data-id="${item.id}" title="Share this app">🔗</button>
                     </div>
                 </div>
             `;
             
-            // Add event listeners
             card.addEventListener('click', (e) => {
-                // Don't open details if share button was clicked
                 if (!e.target.classList.contains('share-btn')) {
                     showItemDetails(item.id);
                 }
             });
             
-            // Share button event listener
             const shareBtn = card.querySelector('.share-btn');
             shareBtn.addEventListener('click', (e) => {
-                e.stopPropagation(); // Prevent card click event
+                e.stopPropagation();
                 shareItem(item.id);
             });
             
@@ -652,15 +910,12 @@ document.getElementById('notification-btn').addEventListener('click', () => {
 
     // --- SHARE FUNCTIONALITY ---
     function shareItem(itemId) {
-        // Generate shareable URL with item ID
         const baseUrl = window.location.origin + window.location.pathname;
         const shareableUrl = `${baseUrl}?item=${itemId}`;
         
-        // Copy to clipboard
         navigator.clipboard.writeText(shareableUrl).then(() => {
             showToast('Link copied to clipboard!');
         }).catch(err => {
-            // Fallback for older browsers
             const textArea = document.createElement('textarea');
             textArea.value = shareableUrl;
             document.body.appendChild(textArea);
@@ -676,6 +931,8 @@ document.getElementById('notification-btn').addEventListener('click', () => {
         const item = allItems[itemId];
         if (!item) return;
 
+        const sizeText = item.sizeMB ? formatFileSize(item.sizeMB, item.sizeUnit || 'MB') : 'Size not specified';
+        
         const detailsContent = document.getElementById('item-details-content');
         detailsContent.innerHTML = `
             <div class="item-details-header">
@@ -683,10 +940,12 @@ document.getElementById('notification-btn').addEventListener('click', () => {
                 <div class="item-details-info">
                     <h2>${item.title}</h2>
                     <p>by ${item.publisherName}</p>
+                    <p>Version: ${item.version || '1.0.0'} | 💾 ${sizeText}</p>
                     <div class="item-card-rating">
                         <span class="stars">★★★★★</span>
                         <span>${(item.avgRating || 0).toFixed(1)} (${item.totalRatings || 0} ratings)</span>
                     </div>
+                    <div class="downloads-count">📥 Total Downloads: ${item.downloads || 0}</div>
                 </div>
             </div>
             <p>${item.description}</p>
@@ -707,33 +966,95 @@ document.getElementById('notification-btn').addEventListener('click', () => {
         // Action buttons
         const actionContainer = detailsContent.querySelector('#action-buttons-container');
         if (item.submissionType === 'embed') {
-            actionContainer.innerHTML = `<button class="btn btn-primary" id="play-btn">Play Now</button>`;
+            actionContainer.innerHTML = `<button class="btn btn-primary" id="play-btn">▶ Play Now</button>`;
             actionContainer.querySelector('#play-btn').onclick = () => {
-                detailsContent.querySelector('#play-area-container').innerHTML = `<iframe class="item-play-area" srcdoc="${item.embedCode}"></iframe>`;
+                detailsContent.querySelector('#play-area-container').innerHTML = `<iframe class="item-play-area" srcdoc="${item.embedCode.replace(/"/g, '&quot;')}"></iframe>`;
             };
         } else {
-            actionContainer.innerHTML = `<a href="${item.downloadLink}" target="_blank" class="btn btn-primary">Download</a>`;
+            actionContainer.innerHTML = `<a href="${item.downloadLink}" target="_blank" class="btn btn-primary" id="download-btn" data-id="${itemId}">📥 Download</a>`;
+            // Track download click
+            const downloadBtn = actionContainer.querySelector('#download-btn');
+            downloadBtn.addEventListener('click', () => trackDownload(itemId));
         }
-        actionContainer.innerHTML += `<button class="btn btn-outline" id="update-request-btn" data-id="${itemId}" style="margin-left:10px;">Request Update</button>`;
-        actionContainer.innerHTML += `<button class="btn btn-outline" id="share-details-btn" data-id="${itemId}" style="margin-left:10px;">Share</button>`;
         
-        // Share button in details modal
-        detailsContent.querySelector('#share-details-btn').onclick = () => {
-            shareItem(itemId);
-        };
+        actionContainer.innerHTML += `<button class="btn btn-outline" id="share-details-btn" data-id="${itemId}" style="margin-left:10px;">🔗 Share</button>`;
         
-        detailsContent.querySelector('#update-request-btn').onclick = () => openSubmissionFormForUpdate(itemId);
+        detailsContent.querySelector('#share-details-btn').onclick = () => shareItem(itemId);
 
         renderReviewForm(itemId);
         loadAndRenderReviews(itemId);
         DOM.itemDetailsModal.classList.add('active');
     }
     
+    // --- UPDATE REQUEST MODAL ---
+    function openUpdateRequestModal(item) {
+        document.getElementById('update-item-id').value = item.id;
+        document.getElementById('update-title').value = item.title;
+        document.getElementById('update-description').value = item.description;
+        document.getElementById('update-logo').value = item.logoUrl;
+        document.getElementById('update-screenshots').value = item.screenshots;
+        document.getElementById('update-type').value = item.type;
+        document.getElementById('update-version').value = item.version;
+        document.getElementById('update-size-mb').value = item.sizeMB;
+        document.getElementById('update-size-unit').value = item.sizeUnit || 'MB';
+        document.getElementById('update-content-type').value = item.submissionType;
+        document.getElementById('update-embed-code').value = item.embedCode || '';
+        document.getElementById('update-download-link').value = item.downloadLink || '';
+        
+        // Show/hide based on submission type
+        const isEmbed = item.submissionType === 'embed';
+        document.getElementById('update-embed-code').style.display = isEmbed ? 'block' : 'none';
+        document.getElementById('update-download-link').style.display = isEmbed ? 'none' : 'block';
+        
+        DOM.updateRequestModal.classList.add('active');
+    }
+    
+    // Handle update request submission
+    document.getElementById('update-request-form')?.addEventListener('submit', (e) => {
+        e.preventDefault();
+        
+        if (!userProfile) {
+            showToast('Please create a profile first', 'error');
+            return;
+        }
+        
+        const sizeMB = parseFloat(document.getElementById('update-size-mb').value);
+        const sizeUnit = document.getElementById('update-size-unit').value;
+        
+        const updateData = {
+            title: document.getElementById('update-title').value,
+            description: document.getElementById('update-description').value,
+            logoUrl: document.getElementById('update-logo').value,
+            screenshots: document.getElementById('update-screenshots').value.split(',').map(s => s.trim()).filter(s => s),
+            type: document.getElementById('update-type').value,
+            version: document.getElementById('update-version').value,
+            sizeMB: sizeMB,
+            sizeUnit: sizeUnit,
+            submissionType: document.getElementById('update-content-type').value,
+            embedCode: document.getElementById('update-embed-code').value,
+            downloadLink: document.getElementById('update-download-link').value,
+            submitterName: userProfile.displayName,
+            submitterEmail: userProfile.email,
+            updateOf: document.getElementById('update-item-id').value,
+            submittedAt: firebase.database.ServerValue.TIMESTAMP
+        };
+        
+        database.ref('pendingSubmissions').push(updateData)
+            .then(() => {
+                showToast('Update request submitted for review!');
+                DOM.updateRequestModal.classList.remove('active');
+                loadUserSubmissions();
+            })
+            .catch(err => showToast(`Failed: ${err.message}`, 'error'));
+    });
+    
     // --- REVIEW SYSTEM ---
     function renderReviewForm(itemId) {
         const container = document.getElementById('review-form-container');
+        if (!container) return;
+        
         if (!userProfile) {
-            container.innerHTML = '<p>You must have a profile to leave a review.</p>';
+            container.innerHTML = '<p>⭐ You must have a profile to leave a review.</p>';
             return;
         }
 
@@ -783,14 +1104,12 @@ document.getElementById('notification-btn').addEventListener('click', () => {
         const reviewRef = database.ref(`reviews/${itemId}`).push();
         const itemRef = database.ref(`items/${itemId}`);
 
-        // Check if user already reviewed
         database.ref(`reviews/${itemId}`).orderByChild('userId').equalTo(reviewData.userId).once('value', snapshot => {
             if (snapshot.exists()) {
                 showToast('You have already reviewed this item.', 'error');
                 return;
             }
             
-            // Submit review and update item rating atomically
             reviewRef.set(reviewData);
             itemRef.transaction(item => {
                 if (item) {
@@ -809,10 +1128,12 @@ document.getElementById('notification-btn').addEventListener('click', () => {
 
     function loadAndRenderReviews(itemId) {
         const reviewsList = document.getElementById('reviews-list');
+        if (!reviewsList) return;
+        
         database.ref(`reviews/${itemId}`).on('value', snapshot => {
             reviewsList.innerHTML = '';
             if (!snapshot.exists()) {
-                reviewsList.innerHTML = '<p>No reviews yet.</p>';
+                reviewsList.innerHTML = '<p>No reviews yet. Be the first to review!</p>';
                 return;
             }
             snapshot.forEach(childSnapshot => {
@@ -829,20 +1150,19 @@ document.getElementById('notification-btn').addEventListener('click', () => {
                         <div class="review-actions">
                             <button class="vote-btn" data-type="like" data-item="${itemId}" data-review="${reviewId}">👍 ${review.likes}</button>
                             <button class="vote-btn" data-type="dislike" data-item="${itemId}" data-review="${reviewId}">👎 ${review.dislikes}</button>
-                            <button class="reply-btn">Reply</button>
-                            ${userProfile && sanitizeEmail(userProfile.email) === review.userId ? `<button class="delete-review-btn" data-item="${itemId}" data-review="${reviewId}" data-rating="${review.rating}">Delete</button>` : ''}
+                            <button class="reply-btn">💬 Reply</button>
+                            ${userProfile && sanitizeEmail(userProfile.email) === review.userId ? `<button class="delete-review-btn" data-item="${itemId}" data-review="${reviewId}" data-rating="${review.rating}">🗑 Delete</button>` : ''}
                         </div>
                     </div>
-                    <p class="review-comment">${review.comment}</p>
+                    <p class="review-comment">${review.comment || ''}</p>
                     <div class="review-replies"></div>
                     <div class="reply-form" style="display:none; margin-left:30px; margin-top:10px;">
-                        <textarea placeholder="Write a reply..."></textarea>
-                        <button class="btn btn-primary btn-sm submit-reply-btn" data-item="${itemId}" data-review="${reviewId}">Post</button>
+                        <textarea placeholder="Write a reply..." rows="2"></textarea>
+                        <button class="btn btn-primary btn-sm submit-reply-btn" data-item="${itemId}" data-review="${reviewId}">Post Reply</button>
                     </div>
                 `;
                 reviewsList.appendChild(reviewCard);
 
-                // Render replies
                 if(review.replies) {
                     const repliesContainer = reviewCard.querySelector('.review-replies');
                     Object.values(review.replies).forEach(reply => {
@@ -917,6 +1237,13 @@ document.getElementById('notification-btn').addEventListener('click', () => {
              timestamp: firebase.database.ServerValue.TIMESTAMP
          };
          database.ref(`reviews/${itemId}/${reviewId}/replies`).push(replyData);
+         // Clear and hide form
+         const replyForm = document.querySelector(`.reply-form`);
+         if (replyForm) {
+             replyForm.style.display = 'none';
+             replyForm.querySelector('textarea').value = '';
+         }
+         showToast('Reply posted!');
     }
     
     // --- SUBMISSIONS ---
@@ -930,60 +1257,105 @@ document.getElementById('notification-btn').addEventListener('click', () => {
         document.getElementById('update-of-id').value = '';
         DOM.submissionModal.classList.add('active');
     }
-    
-    function openSubmissionFormForUpdate(itemId) {
-        openSubmissionForm();
-        const item = allItems[itemId];
-        if (userProfile.email !== item.publisherEmail) {
-            showToast("You can only request updates for your own apps.", "error");
-            return;
-        }
-        document.getElementById('submission-title').value = item.title;
-        document.getElementById('submission-desc').value = item.description;
-        document.getElementById('submission-logo').value = item.logoUrl;
-        document.getElementById('update-of-id').value = itemId;
-        DOM.itemDetailsModal.classList.remove('active');
-    }
 
     function handleSubmission(e) {
         e.preventDefault();
+        
+        const sizeMB = parseFloat(document.getElementById('submission-size-mb').value);
+        if (isNaN(sizeMB) || sizeMB <= 0) {
+            showToast('Please enter a valid file size', 'error');
+            return;
+        }
+        
         const submissionData = {
             title: document.getElementById('submission-title').value,
             description: document.getElementById('submission-desc').value,
             logoUrl: document.getElementById('submission-logo').value,
             screenshots: document.getElementById('submission-screenshots').value.split(',').map(s => s.trim()).filter(s => s),
             type: document.getElementById('submission-type').value,
+            version: document.getElementById('submission-version').value,
+            sizeMB: sizeMB,
+            sizeUnit: document.getElementById('submission-size-unit').value,
             submissionType: document.getElementById('submission-content-type').value,
             embedCode: document.getElementById('submission-embed-code').value,
             downloadLink: document.getElementById('submission-download-link').value,
             submitterName: userProfile.displayName,
             submitterEmail: userProfile.email,
-            updateOf: document.getElementById('update-of-id').value || null
+            updateOf: document.getElementById('update-of-id').value || null,
+            submittedAt: firebase.database.ServerValue.TIMESTAMP
         };
 
         database.ref('pendingSubmissions').push(submissionData)
             .then(() => {
                 showToast('Your submission has been sent for review!');
                 DOM.submissionModal.classList.remove('active');
-                e.target.reset();
+                document.getElementById('submission-form').reset();
+                loadUserSubmissions();
             })
             .catch(err => showToast(`Submission failed: ${err.message}`, 'error'));
+    }
+
+    // --- SUBMISSION TYPE TOGGLE ---
+    function setupSubmissionTypeToggle() {
+        const contentTypeSelect = document.getElementById('submission-content-type');
+        const embedCode = document.getElementById('submission-embed-code');
+        const downloadLink = document.getElementById('submission-download-link');
+        
+        if (contentTypeSelect) {
+            contentTypeSelect.addEventListener('change', (e) => {
+                const isEmbed = e.target.value === 'embed';
+                embedCode.style.display = isEmbed ? 'block' : 'none';
+                downloadLink.style.display = isEmbed ? 'none' : 'block';
+            });
+        }
+        
+        const updateContentType = document.getElementById('update-content-type');
+        const updateEmbedCode = document.getElementById('update-embed-code');
+        const updateDownloadLink = document.getElementById('update-download-link');
+        
+        if (updateContentType) {
+            updateContentType.addEventListener('change', (e) => {
+                const isEmbed = e.target.value === 'embed';
+                updateEmbedCode.style.display = isEmbed ? 'block' : 'none';
+                updateDownloadLink.style.display = isEmbed ? 'none' : 'block';
+            });
+        }
+    }
+
+    // --- TABS NAVIGATION ---
+    function setupTabs() {
+        DOM.tabBtns.forEach(btn => {
+            btn.addEventListener('click', () => {
+                const tabId = btn.dataset.tab;
+                
+                DOM.tabBtns.forEach(b => b.classList.remove('active'));
+                DOM.tabContents.forEach(c => c.classList.remove('active'));
+                
+                btn.classList.add('active');
+                document.getElementById(`${tabId}-tab`).classList.add('active');
+                
+                if (tabId === 'my-submissions') {
+                    loadUserSubmissions();
+                }
+            });
+        });
     }
 
     // --- EVENT LISTENERS ---
     window.addEventListener('DOMContentLoaded', () => {
         checkUserProfile();
         loadItems();
+        setupSubmissionTypeToggle();
+        setupTabs();
         
         // Check for direct item link in URL
         const urlParams = new URLSearchParams(window.location.search);
         const itemId = urlParams.get('item');
         if (itemId) {
-            // Load items first, then show the specific item
             database.ref('items').once('value', (snapshot) => {
                 allItems = snapshot.val() || {};
                 if (allItems[itemId]) {
-                    showItemDetails(itemId);
+                    setTimeout(() => showItemDetails(itemId), 500);
                 } else {
                     showToast('App not found', 'error');
                 }
@@ -1005,13 +1377,6 @@ document.getElementById('notification-btn').addEventListener('click', () => {
         document.getElementById('profile-form').addEventListener('submit', saveProfile);
         document.getElementById('submission-form').addEventListener('submit', handleSubmission);
 
-        // Submission Type Toggle
-        document.getElementById('submission-content-type').addEventListener('change', e => {
-            const isEmbed = e.target.value === 'embed';
-            document.getElementById('submission-embed-code').style.display = isEmbed ? 'block' : 'none';
-            document.getElementById('submission-download-link').style.display = isEmbed ? 'none' : 'block';
-        });
-
         // Filtering and Sorting
         DOM.filterButtons.forEach(button => {
             button.addEventListener('click', () => {
@@ -1028,6 +1393,11 @@ document.getElementById('notification-btn').addEventListener('click', () => {
         DOM.searchBar.addEventListener('keyup', (e) => {
             currentSearch = e.target.value.toLowerCase();
             renderItems();
+        });
+
+        // Notification button
+        document.getElementById('notification-btn').addEventListener('click', () => {
+            showToast('Check "My Submissions" for status updates!', 'info');
         });
 
         // Event delegation for dynamic content

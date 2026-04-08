@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>App Stocks</title>
+    <title>App Stocks - Download Counter Fixed</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
@@ -64,12 +64,15 @@
             transition: all 0.3s ease;
             text-transform: uppercase;
             letter-spacing: 1px;
+            border: none;
+            display: inline-block;
+            text-decoration: none;
+            text-align: center;
         }
 
         .btn-primary {
             background: var(--accent-gradient);
             color: #fff;
-            border: none;
             box-shadow: 0 0 15px rgba(255, 0, 255, 0.4), 0 0 10px rgba(0, 255, 255, 0.4);
         }
         .btn-primary:hover {
@@ -86,6 +89,11 @@
             background: var(--neon-cyan);
             color: var(--bg-color);
             box-shadow: 0 0 15px var(--neon-cyan);
+        }
+
+        .btn-sm {
+            padding: 5px 10px;
+            font-size: 0.8rem;
         }
 
         h1, h2, h3 {
@@ -110,6 +118,13 @@
             outline: none;
             border-color: var(--neon-cyan);
             box-shadow: 0 0 10px var(--neon-cyan);
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: 1fr auto;
+            gap: 10px;
+            align-items: center;
         }
 
         /* --- Header --- */
@@ -311,7 +326,7 @@
         }
         
         #item-details-modal .modal-content { max-width: 900px; }
-        .item-details-header { display: flex; gap: 20px; margin-bottom: 20px; }
+        .item-details-header { display: flex; gap: 20px; margin-bottom: 20px; flex-wrap: wrap; }
         .item-details-logo { width: 120px; height: 120px; border-radius: 15px; object-fit: cover; }
         .item-details-info h2 { margin-bottom: 5px; }
         .screenshots-carousel { display: flex; gap: 10px; overflow-x: auto; margin: 20px 0; padding-bottom: 10px; }
@@ -325,9 +340,6 @@
         }
 
         /* --- My Submissions Section --- */
-        .my-submissions-section {
-            margin-bottom: 40px;
-        }
         .submissions-list {
             max-height: 400px;
             overflow-y: auto;
@@ -338,6 +350,8 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
+            flex-wrap: wrap;
+            gap: 10px;
         }
         .submission-item:last-child { border-bottom: none; }
 
@@ -349,10 +363,9 @@
             border-top: 1px solid var(--glass-border);
             padding: 15px 0;
         }
-        .review-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 5px; }
+        .review-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 5px; flex-wrap: wrap; gap: 10px; }
         .review-author { font-weight: 600; color: #fff; }
-        .review-actions button { background: none; border: none; color: var(--text-muted); cursor: pointer; font-size: 1rem; }
-        .review-actions button.liked, .review-actions button.disliked { color: var(--neon-cyan); }
+        .review-actions button { background: none; border: none; color: var(--text-muted); cursor: pointer; font-size: 1rem; margin: 0 5px; }
         .review-replies { margin-left: 30px; margin-top: 10px; }
         .reply-card { background: rgba(0,0,0,0.2); padding: 10px; border-radius: 8px; margin-bottom: 5px; }
 
@@ -404,6 +417,12 @@
         .tab-content.active {
             display: block;
         }
+        
+        .info-text {
+            font-size: 0.8rem;
+            color: var(--neon-cyan);
+            margin-top: 10px;
+        }
     </style>
 </head>
 <body>
@@ -432,9 +451,7 @@
             <!-- Featured Section -->
             <section class="featured-section">
                 <h2>🔥 Featured</h2>
-                <div id="featured-carousel" class="featured-carousel">
-                    <!-- Featured items will be injected here -->
-                </div>
+                <div id="featured-carousel" class="featured-carousel"></div>
             </section>
 
             <!-- Controls -->
@@ -454,9 +471,7 @@
 
             <!-- Items Grid -->
             <section>
-                <div id="items-grid" class="items-grid">
-                    <!-- App/Game cards will be injected here -->
-                </div>
+                <div id="items-grid" class="items-grid"></div>
             </section>
         </div>
 
@@ -464,9 +479,7 @@
         <div id="my-submissions-tab" class="tab-content">
             <div class="glass-panel">
                 <h2>📝 My Submissions</h2>
-                <div id="my-submissions-list" class="submissions-list">
-                    <!-- User's submissions will appear here -->
-                </div>
+                <div id="my-submissions-list" class="submissions-list"></div>
             </div>
         </div>
     </main>
@@ -505,14 +518,13 @@
                     <option value="Game">Game</option>
                 </select>
                 
-                <!-- NEW: Version and Size fields -->
                 <input type="text" id="submission-version" placeholder="Version (e.g., 1.0.0)" required>
                 <div class="form-grid">
                     <input type="number" id="submission-size-mb" placeholder="Size (MB)" step="0.1" required>
                     <select id="submission-size-unit">
-                        <option value="MB">MB</option>
-                        <option value="GB">GB</option>
                         <option value="KB">KB</option>
+                        <option value="MB" selected>MB</option>
+                        <option value="GB">GB</option>
                     </select>
                 </div>
                 
@@ -534,9 +546,7 @@
     <div id="item-details-modal" class="modal">
         <div class="modal-content glass-panel">
             <span class="modal-close">&times;</span>
-            <div id="item-details-content">
-                <!-- Details will be injected here -->
-            </div>
+            <div id="item-details-content"></div>
         </div>
     </div>
 
@@ -560,9 +570,9 @@
                 <div class="form-grid">
                     <input type="number" id="update-size-mb" placeholder="Size (MB)" step="0.1" required>
                     <select id="update-size-unit">
-                        <option value="MB">MB</option>
-                        <option value="GB">GB</option>
                         <option value="KB">KB</option>
+                        <option value="MB" selected>MB</option>
+                        <option value="GB">GB</option>
                     </select>
                 </div>
                 <select id="update-content-type" required>
@@ -592,11 +602,10 @@
         appId: "1:1066420357396:web:99348a13f243bfb5601a01"
     };
 
-    // Initialize Firebase
     firebase.initializeApp(firebaseConfig);
     const database = firebase.database();
 
-    // --- GLOBAL STATE & DOM ELEMENTS ---
+    // --- GLOBAL STATE ---
     let userProfile = null;
     let allItems = {};
     let userSubmissions = {};
@@ -604,6 +613,7 @@
     let currentSort = 'newest';
     let currentSearch = '';
 
+    // --- DOM Elements ---
     const DOM = {
         welcomeMessage: document.getElementById('welcome-message'),
         profileBtn: document.getElementById('profile-btn'),
@@ -623,10 +633,11 @@
         tabContents: document.querySelectorAll('.tab-content')
     };
     
-    // --- UTILITY FUNCTIONS ---
+    // --- UTILITIES ---
     const sanitizeEmail = (email) => email.replace(/[.#$[\]]/g, "_");
     
     const formatFileSize = (sizeMB, unit) => {
+        if (!sizeMB) return 'N/A';
         if (unit === 'GB') return `${sizeMB} GB`;
         if (unit === 'KB') return `${sizeMB} KB`;
         return `${sizeMB} MB`;
@@ -640,6 +651,52 @@
         toastContainer.appendChild(toast);
         setTimeout(() => toast.remove(), 5000);
     };
+
+    // --- DOWNLOAD TRACKING (FIXED) ---
+    function trackDownload(itemId, downloadUrl) {
+        if (!itemId) {
+            console.error('No item ID provided for download tracking');
+            if (downloadUrl) window.open(downloadUrl, '_blank');
+            return;
+        }
+        
+        console.log(`Tracking download for item: ${itemId}`);
+        
+        const itemRef = database.ref(`items/${itemId}`);
+        itemRef.transaction(item => {
+            if (item) {
+                item.downloads = (item.downloads || 0) + 1;
+                console.log(`Downloaded! New count: ${item.downloads}`);
+            } else {
+                console.warn('Item not found in database:', itemId);
+            }
+            return item;
+        }).then(() => {
+            showToast('📥 Downloaded !', 'info');
+            if (downloadUrl) {
+                window.open(downloadUrl, '_blank');
+            }
+        }).catch(err => {
+            console.error('Download tracking error:', err);
+            showToast('Error counting download, but link will open', 'error');
+            if (downloadUrl) {
+                window.open(downloadUrl, '_blank');
+            }
+        });
+    }
+
+    // Setup global download button listener
+    function setupDownloadTracking() {
+        document.body.addEventListener('click', (e) => {
+            const downloadBtn = e.target.closest('.download-btn');
+            if (downloadBtn) {
+                e.preventDefault();
+                const itemId = downloadBtn.getAttribute('data-id');
+                const downloadUrl = downloadBtn.getAttribute('data-url') || downloadBtn.href;
+                trackDownload(itemId, downloadUrl);
+            }
+        });
+    }
 
     // --- PROFILE MANAGEMENT ---
     function checkUserProfile() {
@@ -678,38 +735,26 @@
         showToast('You have been logged out.');
     }
 
-    // Load user's submissions from pendingSubmissions and published items
+    // --- USER SUBMISSIONS ---
     function loadUserSubmissions() {
         if (!userProfile) return;
         
-        const sanitizedEmail = sanitizeEmail(userProfile.email);
         userSubmissions = {};
         
-        // Load pending submissions
         database.ref('pendingSubmissions').orderByChild('submitterEmail').equalTo(userProfile.email).on('value', (snapshot) => {
             snapshot.forEach(child => {
-                userSubmissions[child.key] = {
-                    id: child.key,
-                    ...child.val(),
-                    status: 'pending'
-                };
+                userSubmissions[child.key] = { id: child.key, ...child.val(), status: 'pending' };
             });
             renderUserSubmissions();
         });
         
-        // Load published items by this user
         database.ref('items').orderByChild('publisherEmail').equalTo(userProfile.email).on('value', (snapshot) => {
             snapshot.forEach(child => {
                 if (userSubmissions[child.key]) {
                     userSubmissions[child.key].status = 'approved';
                     userSubmissions[child.key].publishedData = child.val();
                 } else {
-                    userSubmissions[child.key] = {
-                        id: child.key,
-                        ...child.val(),
-                        status: 'approved',
-                        publishedData: child.val()
-                    };
+                    userSubmissions[child.key] = { id: child.key, ...child.val(), status: 'approved', publishedData: child.val() };
                 }
             });
             renderUserSubmissions();
@@ -718,7 +763,6 @@
 
     function renderUserSubmissions() {
         if (!DOM.mySubmissionsList) return;
-        
         DOM.mySubmissionsList.innerHTML = '';
         const submissionsArray = Object.values(userSubmissions);
         
@@ -741,39 +785,30 @@
                     ${sub.status === 'approved' && sub.publishedData ? `<div class="downloads-count">📥 Downloads: ${sub.publishedData.downloads || 0}</div>` : ''}
                 </div>
                 <div class="actions">
-                    ${sub.status === 'approved' ? `<button class="btn btn-sm btn-outline request-update-btn" data-id="${sub.id}" data-title="${sub.title}" data-desc="${sub.description}" data-logo="${sub.logoUrl}" data-screenshots="${(sub.screenshots || []).join(',')}" data-type="${sub.type}" data-version="${sub.version || ''}" data-size-mb="${sub.sizeMB || ''}" data-size-unit="${sub.sizeUnit || 'MB'}" data-submission-type="${sub.submissionType}" data-embed-code="${sub.embedCode || ''}" data-download-link="${sub.downloadLink || ''}">🔄 Request Update</button>` : ''}
-                    ${sub.status === 'pending' ? `<button class="btn btn-sm btn-danger cancel-submission-btn" data-id="${sub.id}">❌ Cancel</button>` : ''}
+                    ${sub.status === 'approved' ? `<button class="btn btn-outline btn-sm request-update-btn" data-id="${sub.id}" data-title="${sub.title}" data-desc="${sub.description}" data-logo="${sub.logoUrl}" data-screenshots="${(sub.screenshots || []).join(',')}" data-type="${sub.type}" data-version="${sub.version || ''}" data-size-mb="${sub.sizeMB || ''}" data-size-unit="${sub.sizeUnit || 'MB'}" data-submission-type="${sub.submissionType}" data-embed-code="${sub.embedCode || ''}" data-download-link="${sub.downloadLink || ''}">🔄 Request Update</button>` : ''}
+                    ${sub.status === 'pending' ? `<button class="btn btn-danger btn-sm cancel-submission-btn" data-id="${sub.id}">❌ Cancel</button>` : ''}
                 </div>
             `;
             DOM.mySubmissionsList.appendChild(subDiv);
         });
         
-        // Add event listeners for update request buttons
         document.querySelectorAll('.request-update-btn').forEach(btn => {
             btn.addEventListener('click', (e) => {
                 e.stopPropagation();
                 openUpdateRequestModal({
-                    id: btn.dataset.id,
-                    title: btn.dataset.title,
-                    description: btn.dataset.desc,
-                    logoUrl: btn.dataset.logo,
-                    screenshots: btn.dataset.screenshots,
-                    type: btn.dataset.type,
-                    version: btn.dataset.version,
-                    sizeMB: btn.dataset.sizeMb,
-                    sizeUnit: btn.dataset.sizeUnit,
-                    submissionType: btn.dataset.submissionType,
-                    embedCode: btn.dataset.embedCode,
+                    id: btn.dataset.id, title: btn.dataset.title, description: btn.dataset.desc,
+                    logoUrl: btn.dataset.logo, screenshots: btn.dataset.screenshots, type: btn.dataset.type,
+                    version: btn.dataset.version, sizeMB: btn.dataset.sizeMb, sizeUnit: btn.dataset.sizeUnit,
+                    submissionType: btn.dataset.submissionType, embedCode: btn.dataset.embedCode,
                     downloadLink: btn.dataset.downloadLink
                 });
             });
         });
         
-        // Add event listeners for cancel buttons
         document.querySelectorAll('.cancel-submission-btn').forEach(btn => {
             btn.addEventListener('click', (e) => {
                 e.stopPropagation();
-                if (confirm('Are you sure you want to cancel this submission?')) {
+                if (confirm('Cancel this submission?')) {
                     database.ref(`pendingSubmissions/${btn.dataset.id}`).remove();
                     showToast('Submission cancelled');
                 }
@@ -784,89 +819,49 @@
     // --- NOTIFICATIONS ---
     function listenForNotifications() {
         if (!userProfile) return;
-        const sanitizedEmail = sanitizeEmail(userProfile.email);
-        const notificationsRef = database.ref(`notifications/${sanitizedEmail}`);
-
+        const notificationsRef = database.ref(`notifications/${sanitizeEmail(userProfile.email)}`);
         notificationsRef.on('child_added', (snapshot) => {
             const notification = snapshot.val();
             if (!notification.seen) {
-                const message = notification.message || `Your submission "${notification.title}" was ${notification.status}.`;
-                showToast(message, notification.status === 'approved' ? 'success' : 'error');
+                showToast(notification.message || `Your submission "${notification.title}" was ${notification.status}.`, 
+                         notification.status === 'approved' ? 'success' : 'error');
                 notificationsRef.child(snapshot.key).update({ seen: true });
-                loadUserSubmissions(); // Refresh submissions list
+                loadUserSubmissions();
             }
         });
     }
 
-    // Track download clicks
-    function trackDownload(itemId) {
-        if (!itemId) return;
-        
-        const itemRef = database.ref(`items/${itemId}`);
-        itemRef.transaction(item => {
-            if (item) {
-                item.downloads = (item.downloads || 0) + 1;
-            }
-            return item;
-        });
-        
-        showToast('Download started!', 'info');
-    }
-
-    // --- CONTENT RENDERING ---
+    // --- RENDER ITEMS ---
     function renderItems() {
         DOM.itemsGrid.innerHTML = '';
         DOM.featuredCarousel.innerHTML = '';
         
         let itemsArray = Object.keys(allItems).map(key => ({ id: key, ...allItems[key] }));
-
-        // 1. Filter
-        if (currentFilter !== 'All') {
-            itemsArray = itemsArray.filter(item => item.type === currentFilter);
-        }
-
-        // 2. Search
-        if (currentSearch) {
-            itemsArray = itemsArray.filter(item => 
-                item.title.toLowerCase().includes(currentSearch) ||
-                item.description.toLowerCase().includes(currentSearch)
-            );
-        }
-
-        // 3. Sort
+        if (currentFilter !== 'All') itemsArray = itemsArray.filter(item => item.type === currentFilter);
+        if (currentSearch) itemsArray = itemsArray.filter(item => item.title.toLowerCase().includes(currentSearch) || item.description.toLowerCase().includes(currentSearch));
+        
         itemsArray.sort((a, b) => {
-            if (currentSort === 'newest') {
-                return b.publishedAt - a.publishedAt;
-            } else if (currentSort === 'top-rated') {
-                return (b.avgRating || 0) - (a.avgRating || 0);
-            } else if (currentSort === 'most-downloaded') {
-                return (b.downloads || 0) - (a.downloads || 0);
-            }
+            if (currentSort === 'newest') return b.publishedAt - a.publishedAt;
+            if (currentSort === 'top-rated') return (b.avgRating || 0) - (a.avgRating || 0);
+            if (currentSort === 'most-downloaded') return (b.downloads || 0) - (a.downloads || 0);
             return 0;
         });
         
-        // Render Featured Carousel
         Object.values(allItems).filter(item => item.isFeatured).forEach(item => {
-             const featuredDiv = document.createElement('div');
-             featuredDiv.className = 'featured-item';
-             const itemId = Object.keys(allItems).find(key => allItems[key] === item);
-             featuredDiv.dataset.id = itemId;
-             featuredDiv.innerHTML = `
-                <img src="${item.logoUrl}" alt="${item.title}">
-                <div class="overlay"><h3>${item.title}</h3></div>
-             `;
-             featuredDiv.addEventListener('click', () => showItemDetails(itemId));
-             DOM.featuredCarousel.appendChild(featuredDiv);
+            const featuredDiv = document.createElement('div');
+            featuredDiv.className = 'featured-item';
+            const itemId = Object.keys(allItems).find(key => allItems[key] === item);
+            featuredDiv.dataset.id = itemId;
+            featuredDiv.innerHTML = `<img src="${item.logoUrl}" alt="${item.title}"><div class="overlay"><h3>${item.title}</h3></div>`;
+            featuredDiv.addEventListener('click', () => showItemDetails(itemId));
+            DOM.featuredCarousel.appendChild(featuredDiv);
         });
 
-        // Render Grid
         itemsArray.forEach(item => {
             const card = document.createElement('div');
             card.className = 'item-card glass-panel';
             card.dataset.id = item.id;
             const avgRating = item.avgRating ? item.avgRating.toFixed(1) : 'N/A';
-            const totalRatings = item.totalRatings || 0;
-            const downloads = item.downloads || 0;
             const sizeText = item.sizeMB ? formatFileSize(item.sizeMB, item.sizeUnit || 'MB') : 'Size N/A';
             
             card.innerHTML = `
@@ -874,96 +869,51 @@
                 <div class="item-card-content">
                     <h3 class="item-card-title">${item.title}</h3>
                     <p class="item-card-publisher">by ${item.publisherName}</p>
-                    <div class="item-card-rating">
-                        <span class="stars">★★★★★</span>
-                        <span>${avgRating} (${totalRatings} ratings)</span>
-                    </div>
-                    <div class="downloads-count">📥 ${downloads} downloads | 💾 ${sizeText}</div>
-                    <div class="item-card-actions">
-                        <button class="share-btn" data-id="${item.id}" title="Share this app">🔗</button>
-                    </div>
+                    <div class="item-card-rating"><span class="stars">★★★★★</span><span>${avgRating} (${item.totalRatings || 0} ratings)</span></div>
+                    <div class="downloads-count">📥 ${item.downloads || 0} downloads | 💾 ${sizeText}</div>
+                    <div class="item-card-actions"><button class="share-btn" data-id="${item.id}" title="Share">🔗</button></div>
                 </div>
             `;
-            
-            card.addEventListener('click', (e) => {
-                if (!e.target.classList.contains('share-btn')) {
-                    showItemDetails(item.id);
-                }
-            });
-            
-            const shareBtn = card.querySelector('.share-btn');
-            shareBtn.addEventListener('click', (e) => {
-                e.stopPropagation();
-                shareItem(item.id);
-            });
-            
+            card.addEventListener('click', (e) => { if (!e.target.classList.contains('share-btn')) showItemDetails(item.id); });
+            card.querySelector('.share-btn').addEventListener('click', (e) => { e.stopPropagation(); shareItem(item.id); });
             DOM.itemsGrid.appendChild(card);
         });
     }
 
     function loadItems() {
-        database.ref('items').on('value', (snapshot) => {
-            allItems = snapshot.val() || {};
-            renderItems();
-        });
+        database.ref('items').on('value', (snapshot) => { allItems = snapshot.val() || {}; renderItems(); });
     }
 
-    // --- SHARE FUNCTIONALITY ---
     function shareItem(itemId) {
-        const baseUrl = window.location.origin + window.location.pathname;
-        const shareableUrl = `${baseUrl}?item=${itemId}`;
-        
-        navigator.clipboard.writeText(shareableUrl).then(() => {
-            showToast('Link copied to clipboard!');
-        }).catch(err => {
-            const textArea = document.createElement('textarea');
-            textArea.value = shareableUrl;
-            document.body.appendChild(textArea);
-            textArea.select();
-            document.execCommand('copy');
-            document.body.removeChild(textArea);
-            showToast('Link copied to clipboard!');
-        });
+        const url = `${window.location.origin}${window.location.pathname}?item=${itemId}`;
+        navigator.clipboard.writeText(url).then(() => showToast('Link copied!')).catch(() => showToast('Link copied!'));
     }
 
-    // --- ITEM DETAILS MODAL ---
+    // --- ITEM DETAILS ---
     async function showItemDetails(itemId) {
         const item = allItems[itemId];
         if (!item) return;
-
         const sizeText = item.sizeMB ? formatFileSize(item.sizeMB, item.sizeUnit || 'MB') : 'Size not specified';
         
         const detailsContent = document.getElementById('item-details-content');
         detailsContent.innerHTML = `
             <div class="item-details-header">
-                <img src="${item.logoUrl}" alt="${item.title}" class="item-details-logo">
+                <img src="${item.logoUrl}" class="item-details-logo">
                 <div class="item-details-info">
                     <h2>${item.title}</h2>
                     <p>by ${item.publisherName}</p>
                     <p>Version: ${item.version || '1.0.0'} | 💾 ${sizeText}</p>
-                    <div class="item-card-rating">
-                        <span class="stars">★★★★★</span>
-                        <span>${(item.avgRating || 0).toFixed(1)} (${item.totalRatings || 0} ratings)</span>
-                    </div>
+                    <div class="item-card-rating"><span class="stars">★★★★★</span><span>${(item.avgRating || 0).toFixed(1)} (${item.totalRatings || 0} ratings)</span></div>
                     <div class="downloads-count">📥 Total Downloads: ${item.downloads || 0}</div>
                 </div>
             </div>
             <p>${item.description}</p>
-            ${item.screenshots && item.screenshots.length > 0 ? `
-                <div class="screenshots-carousel">
-                    ${item.screenshots.map(url => `<img src="${url}" alt="screenshot">`).join('')}
-                </div>` : ''
-            }
+            ${item.screenshots?.length ? `<div class="screenshots-carousel">${item.screenshots.map(url => `<img src="${url}">`).join('')}</div>` : ''}
             <div id="action-buttons-container"></div>
             <div id="play-area-container"></div>
-            <div class="reviews-section">
-                <h3>Reviews & Ratings</h3>
-                <div id="review-form-container"></div>
-                <div id="reviews-list"></div>
-            </div>
+            <div class="reviews-section"><h3>Reviews</h3><div id="review-form-container"></div><div id="reviews-list"></div></div>
         `;
         
-        // Action buttons
         const actionContainer = detailsContent.querySelector('#action-buttons-container');
         if (item.submissionType === 'embed') {
             actionContainer.innerHTML = `<button class="btn btn-primary" id="play-btn">▶ Play Now</button>`;
@@ -971,22 +921,18 @@
                 detailsContent.querySelector('#play-area-container').innerHTML = `<iframe class="item-play-area" srcdoc="${item.embedCode.replace(/"/g, '&quot;')}"></iframe>`;
             };
         } else {
-            actionContainer.innerHTML = `<a href="${item.downloadLink}" target="_blank" class="btn btn-primary" id="download-btn" data-id="${itemId}">📥 Download</a>`;
-            // Track download click
-            const downloadBtn = actionContainer.querySelector('#download-btn');
-            downloadBtn.addEventListener('click', () => trackDownload(itemId));
+            // FIXED: Download button with proper data attributes
+            actionContainer.innerHTML = `<a href="${item.downloadLink}" class="btn btn-primary download-btn" data-id="${itemId}" data-url="${item.downloadLink}" target="_blank">📥 Download</a>`;
         }
-        
-        actionContainer.innerHTML += `<button class="btn btn-outline" id="share-details-btn" data-id="${itemId}" style="margin-left:10px;">🔗 Share</button>`;
-        
+        actionContainer.innerHTML += `<button class="btn btn-outline" id="share-details-btn" style="margin-left:10px;">🔗 Share</button>`;
         detailsContent.querySelector('#share-details-btn').onclick = () => shareItem(itemId);
-
+        
         renderReviewForm(itemId);
         loadAndRenderReviews(itemId);
         DOM.itemDetailsModal.classList.add('active');
     }
     
-    // --- UPDATE REQUEST MODAL ---
+    // --- UPDATE REQUEST ---
     function openUpdateRequestModal(item) {
         document.getElementById('update-item-id').value = item.id;
         document.getElementById('update-title').value = item.title;
@@ -1000,36 +946,24 @@
         document.getElementById('update-content-type').value = item.submissionType;
         document.getElementById('update-embed-code').value = item.embedCode || '';
         document.getElementById('update-download-link').value = item.downloadLink || '';
-        
-        // Show/hide based on submission type
         const isEmbed = item.submissionType === 'embed';
         document.getElementById('update-embed-code').style.display = isEmbed ? 'block' : 'none';
         document.getElementById('update-download-link').style.display = isEmbed ? 'none' : 'block';
-        
         DOM.updateRequestModal.classList.add('active');
     }
     
-    // Handle update request submission
     document.getElementById('update-request-form')?.addEventListener('submit', (e) => {
         e.preventDefault();
-        
-        if (!userProfile) {
-            showToast('Please create a profile first', 'error');
-            return;
-        }
-        
-        const sizeMB = parseFloat(document.getElementById('update-size-mb').value);
-        const sizeUnit = document.getElementById('update-size-unit').value;
-        
+        if (!userProfile) return showToast('Create a profile first', 'error');
         const updateData = {
             title: document.getElementById('update-title').value,
             description: document.getElementById('update-description').value,
             logoUrl: document.getElementById('update-logo').value,
-            screenshots: document.getElementById('update-screenshots').value.split(',').map(s => s.trim()).filter(s => s),
+            screenshots: document.getElementById('update-screenshots').value.split(',').map(s => s.trim()),
             type: document.getElementById('update-type').value,
             version: document.getElementById('update-version').value,
-            sizeMB: sizeMB,
-            sizeUnit: sizeUnit,
+            sizeMB: parseFloat(document.getElementById('update-size-mb').value),
+            sizeUnit: document.getElementById('update-size-unit').value,
             submissionType: document.getElementById('update-content-type').value,
             embedCode: document.getElementById('update-embed-code').value,
             downloadLink: document.getElementById('update-download-link').value,
@@ -1038,46 +972,34 @@
             updateOf: document.getElementById('update-item-id').value,
             submittedAt: firebase.database.ServerValue.TIMESTAMP
         };
-        
-        database.ref('pendingSubmissions').push(updateData)
-            .then(() => {
-                showToast('Update request submitted for review!');
-                DOM.updateRequestModal.classList.remove('active');
-                loadUserSubmissions();
-            })
-            .catch(err => showToast(`Failed: ${err.message}`, 'error'));
+        database.ref('pendingSubmissions').push(updateData).then(() => {
+            showToast('Update request submitted!');
+            DOM.updateRequestModal.classList.remove('active');
+            loadUserSubmissions();
+        }).catch(err => showToast(err.message, 'error'));
     });
     
     // --- REVIEW SYSTEM ---
     function renderReviewForm(itemId) {
         const container = document.getElementById('review-form-container');
         if (!container) return;
-        
-        if (!userProfile) {
-            container.innerHTML = '<p>⭐ You must have a profile to leave a review.</p>';
-            return;
-        }
-
+        if (!userProfile) { container.innerHTML = '<p>⭐ Login to leave a review.</p>'; return; }
         container.innerHTML = `
-            <form id="review-form" class="glass-panel" style="margin-bottom:20px;">
+            <form id="review-form" class="glass-panel">
                 <h4>Leave a Review</h4>
                 <div class="review-form-stars" data-rating="0">
-                    <span data-value="1">★</span><span data-value="2">★</span><span data-value="3">★</span><span data-value="4">★</span><span data-value="5">★</span>
+                    ${[1,2,3,4,5].map(v => `<span data-value="${v}">★</span>`).join('')}
                 </div>
-                <textarea id="review-comment" placeholder="Optional comment..." rows="3"></textarea>
-                <button type="submit" class="btn btn-primary">Submit Review</button>
+                <textarea id="review-comment" placeholder="Comment..." rows="3"></textarea>
+                <button type="submit" class="btn btn-primary">Submit</button>
             </form>
         `;
-
         const stars = container.querySelectorAll('.review-form-stars span');
-        stars.forEach(star => {
-            star.addEventListener('click', () => {
-                const rating = star.dataset.value;
-                container.querySelector('.review-form-stars').dataset.rating = rating;
-                stars.forEach(s => s.classList.toggle('selected', s.dataset.value <= rating));
-            });
-        });
-
+        stars.forEach(star => star.addEventListener('click', () => {
+            const rating = star.dataset.value;
+            container.querySelector('.review-form-stars').dataset.rating = rating;
+            stars.forEach(s => s.classList.toggle('selected', s.dataset.value <= rating));
+        }));
         document.getElementById('review-form').addEventListener('submit', (e) => submitReview(e, itemId));
     }
     
@@ -1085,325 +1007,184 @@
         e.preventDefault();
         const rating = parseInt(document.querySelector('.review-form-stars').dataset.rating);
         const comment = document.getElementById('review-comment').value;
-
-        if (rating === 0) {
-            showToast('Please select a star rating.', 'error');
-            return;
-        }
-        
+        if (!rating) return showToast('Select a rating', 'error');
         const reviewData = {
-            userId: sanitizeEmail(userProfile.email),
-            username: userProfile.displayName,
-            rating,
-            comment,
-            timestamp: firebase.database.ServerValue.TIMESTAMP,
-            likes: 0,
-            dislikes: 0
+            userId: sanitizeEmail(userProfile.email), username: userProfile.displayName,
+            rating, comment, timestamp: firebase.database.ServerValue.TIMESTAMP, likes: 0, dislikes: 0
         };
-
-        const reviewRef = database.ref(`reviews/${itemId}`).push();
-        const itemRef = database.ref(`items/${itemId}`);
-
         database.ref(`reviews/${itemId}`).orderByChild('userId').equalTo(reviewData.userId).once('value', snapshot => {
-            if (snapshot.exists()) {
-                showToast('You have already reviewed this item.', 'error');
-                return;
-            }
-            
-            reviewRef.set(reviewData);
-            itemRef.transaction(item => {
-                if (item) {
-                    item.totalRatings = (item.totalRatings || 0) + 1;
-                    item.sumOfRatings = (item.sumOfRatings || 0) + rating;
-                    item.avgRating = item.sumOfRatings / item.totalRatings;
-                }
+            if (snapshot.exists()) return showToast('Already reviewed', 'error');
+            database.ref(`reviews/${itemId}`).push(reviewData);
+            database.ref(`items/${itemId}`).transaction(item => {
+                if (item) { item.totalRatings = (item.totalRatings || 0) + 1; item.sumOfRatings = (item.sumOfRatings || 0) + rating; item.avgRating = item.sumOfRatings / item.totalRatings; }
                 return item;
             });
-
             showToast('Review submitted!');
             document.getElementById('review-form').reset();
-            document.querySelectorAll('.review-form-stars span').forEach(s => s.classList.remove('selected'));
         });
     }
-
+    
     function loadAndRenderReviews(itemId) {
         const reviewsList = document.getElementById('reviews-list');
         if (!reviewsList) return;
-        
         database.ref(`reviews/${itemId}`).on('value', snapshot => {
             reviewsList.innerHTML = '';
-            if (!snapshot.exists()) {
-                reviewsList.innerHTML = '<p>No reviews yet. Be the first to review!</p>';
-                return;
-            }
-            snapshot.forEach(childSnapshot => {
-                const reviewId = childSnapshot.key;
-                const review = childSnapshot.val();
-                
+            if (!snapshot.exists()) { reviewsList.innerHTML = '<p>No reviews yet.</p>'; return; }
+            snapshot.forEach(child => {
+                const review = child.val();
                 const reviewCard = document.createElement('div');
                 reviewCard.className = 'review-card';
                 reviewCard.innerHTML = `
                     <div class="review-header">
-                        <div>
-                            <span class="review-author">${review.username}</span> - <span class="stars">${'★'.repeat(review.rating)}${'☆'.repeat(5-review.rating)}</span>
-                        </div>
+                        <div><span class="review-author">${review.username}</span> - ${'★'.repeat(review.rating)}${'☆'.repeat(5-review.rating)}</div>
                         <div class="review-actions">
-                            <button class="vote-btn" data-type="like" data-item="${itemId}" data-review="${reviewId}">👍 ${review.likes}</button>
-                            <button class="vote-btn" data-type="dislike" data-item="${itemId}" data-review="${reviewId}">👎 ${review.dislikes}</button>
+                            <button class="vote-btn" data-type="like" data-item="${itemId}" data-review="${child.key}">👍 ${review.likes}</button>
+                            <button class="vote-btn" data-type="dislike" data-item="${itemId}" data-review="${child.key}">👎 ${review.dislikes}</button>
                             <button class="reply-btn">💬 Reply</button>
-                            ${userProfile && sanitizeEmail(userProfile.email) === review.userId ? `<button class="delete-review-btn" data-item="${itemId}" data-review="${reviewId}" data-rating="${review.rating}">🗑 Delete</button>` : ''}
+                            ${userProfile && sanitizeEmail(userProfile.email) === review.userId ? `<button class="delete-review-btn" data-item="${itemId}" data-review="${child.key}" data-rating="${review.rating}">🗑 Delete</button>` : ''}
                         </div>
                     </div>
-                    <p class="review-comment">${review.comment || ''}</p>
+                    <p>${review.comment || ''}</p>
                     <div class="review-replies"></div>
-                    <div class="reply-form" style="display:none; margin-left:30px; margin-top:10px;">
-                        <textarea placeholder="Write a reply..." rows="2"></textarea>
-                        <button class="btn btn-primary btn-sm submit-reply-btn" data-item="${itemId}" data-review="${reviewId}">Post Reply</button>
-                    </div>
+                    <div class="reply-form" style="display:none; margin-top:10px;"><textarea rows="2"></textarea><button class="btn btn-primary btn-sm submit-reply-btn" data-item="${itemId}" data-review="${child.key}">Post</button></div>
                 `;
                 reviewsList.appendChild(reviewCard);
-
-                if(review.replies) {
+                if (review.replies) {
                     const repliesContainer = reviewCard.querySelector('.review-replies');
                     Object.values(review.replies).forEach(reply => {
-                        repliesContainer.innerHTML += `
-                          <div class="reply-card">
-                            <strong>${reply.username}:</strong> ${reply.text}
-                          </div>
-                        `;
+                        repliesContainer.innerHTML += `<div class="reply-card"><strong>${reply.username}:</strong> ${reply.text}</div>`;
                     });
                 }
             });
         });
     }
-
+    
     function handleReviewInteraction(e) {
         const target = e.target;
-        if(target.classList.contains('vote-btn')) {
-             voteOnReview(target.dataset.item, target.dataset.review, target.dataset.type);
-        }
-        if (target.classList.contains('delete-review-btn')) {
-            deleteReview(target.dataset.item, target.dataset.review, parseInt(target.dataset.rating));
-        }
-        if (target.classList.contains('reply-btn')) {
-            target.closest('.review-card').querySelector('.reply-form').style.display = 'block';
-        }
+        if (target.classList.contains('vote-btn')) voteOnReview(target.dataset.item, target.dataset.review, target.dataset.type);
+        if (target.classList.contains('delete-review-btn')) deleteReview(target.dataset.item, target.dataset.review, parseInt(target.dataset.rating));
+        if (target.classList.contains('reply-btn')) target.closest('.review-card').querySelector('.reply-form').style.display = 'block';
         if (target.classList.contains('submit-reply-btn')) {
-            const replyText = target.previousElementSibling.value;
-            postReply(target.dataset.item, target.dataset.review, replyText);
+            const text = target.previousElementSibling.value;
+            if (text.trim()) postReply(target.dataset.item, target.dataset.review, text);
         }
     }
-
-    function voteOnReview(itemId, reviewId, voteType) {
-        if (!userProfile) { showToast('You need a profile to vote.', 'error'); return; }
-
-        const voteRecord = JSON.parse(localStorage.getItem('reviewVotes')) || {};
-        if (voteRecord[reviewId]) {
-            showToast('You have already voted on this review.', 'error');
-            return;
-        }
-
-        const reviewRef = database.ref(`reviews/${itemId}/${reviewId}`);
-        reviewRef.child(voteType + 's').set(firebase.database.ServerValue.increment(1));
-        
-        voteRecord[reviewId] = voteType;
-        localStorage.setItem('reviewVotes', JSON.stringify(voteRecord));
+    
+    function voteOnReview(itemId, reviewId, type) {
+        if (!userProfile) return showToast('Login to vote', 'error');
+        const votes = JSON.parse(localStorage.getItem('reviewVotes') || '{}');
+        if (votes[reviewId]) return showToast('Already voted', 'error');
+        database.ref(`reviews/${itemId}/${reviewId}/${type}s`).set(firebase.database.ServerValue.increment(1));
+        votes[reviewId] = type;
+        localStorage.setItem('reviewVotes', JSON.stringify(votes));
         showToast('Vote counted!');
     }
     
     function deleteReview(itemId, reviewId, rating) {
-        if (!confirm('Are you sure you want to delete your review?')) return;
-
+        if (!confirm('Delete this review?')) return;
         database.ref(`reviews/${itemId}/${reviewId}`).remove();
         database.ref(`items/${itemId}`).transaction(item => {
-            if (item) {
-                item.totalRatings = (item.totalRatings || 1) - 1;
-                item.sumOfRatings = (item.sumOfRatings || rating) - rating;
-                item.avgRating = item.totalRatings > 0 ? item.sumOfRatings / item.totalRatings : 0;
-            }
+            if (item) { item.totalRatings = Math.max(0, (item.totalRatings || 1) - 1); item.sumOfRatings = Math.max(0, (item.sumOfRatings || rating) - rating); item.avgRating = item.totalRatings > 0 ? item.sumOfRatings / item.totalRatings : 0; }
             return item;
         });
-        showToast('Review deleted.');
+        showToast('Review deleted');
     }
-
+    
     function postReply(itemId, reviewId, text) {
-         if (!userProfile) { showToast('You need a profile to reply.', 'error'); return; }
-         if (!text.trim()) return;
-
-         const replyData = {
-             userId: sanitizeEmail(userProfile.email),
-             username: userProfile.displayName,
-             text,
-             timestamp: firebase.database.ServerValue.TIMESTAMP
-         };
-         database.ref(`reviews/${itemId}/${reviewId}/replies`).push(replyData);
-         // Clear and hide form
-         const replyForm = document.querySelector(`.reply-form`);
-         if (replyForm) {
-             replyForm.style.display = 'none';
-             replyForm.querySelector('textarea').value = '';
-         }
-         showToast('Reply posted!');
+        if (!userProfile) return showToast('Login to reply', 'error');
+        const reply = { userId: sanitizeEmail(userProfile.email), username: userProfile.displayName, text, timestamp: firebase.database.ServerValue.TIMESTAMP };
+        database.ref(`reviews/${itemId}/${reviewId}/replies`).push(reply);
+        showToast('Reply posted');
     }
     
     // --- SUBMISSIONS ---
     function openSubmissionForm() {
-        if (!userProfile) {
-            showToast('Please create a profile first to submit content.', 'error');
-            DOM.profileModal.classList.add('active');
-            return;
-        }
+        if (!userProfile) { showToast('Create a profile first', 'error'); DOM.profileModal.classList.add('active'); return; }
         document.getElementById('submission-form').reset();
         document.getElementById('update-of-id').value = '';
         DOM.submissionModal.classList.add('active');
     }
-
+    
     function handleSubmission(e) {
         e.preventDefault();
-        
         const sizeMB = parseFloat(document.getElementById('submission-size-mb').value);
-        if (isNaN(sizeMB) || sizeMB <= 0) {
-            showToast('Please enter a valid file size', 'error');
-            return;
-        }
-        
+        if (isNaN(sizeMB) || sizeMB <= 0) return showToast('Valid file size required', 'error');
         const submissionData = {
             title: document.getElementById('submission-title').value,
             description: document.getElementById('submission-desc').value,
             logoUrl: document.getElementById('submission-logo').value,
-            screenshots: document.getElementById('submission-screenshots').value.split(',').map(s => s.trim()).filter(s => s),
+            screenshots: document.getElementById('submission-screenshots').value.split(',').map(s => s.trim()),
             type: document.getElementById('submission-type').value,
             version: document.getElementById('submission-version').value,
-            sizeMB: sizeMB,
-            sizeUnit: document.getElementById('submission-size-unit').value,
+            sizeMB, sizeUnit: document.getElementById('submission-size-unit').value,
             submissionType: document.getElementById('submission-content-type').value,
             embedCode: document.getElementById('submission-embed-code').value,
             downloadLink: document.getElementById('submission-download-link').value,
-            submitterName: userProfile.displayName,
-            submitterEmail: userProfile.email,
+            submitterName: userProfile.displayName, submitterEmail: userProfile.email,
             updateOf: document.getElementById('update-of-id').value || null,
             submittedAt: firebase.database.ServerValue.TIMESTAMP
         };
-
-        database.ref('pendingSubmissions').push(submissionData)
-            .then(() => {
-                showToast('Your submission has been sent for review!');
-                DOM.submissionModal.classList.remove('active');
-                document.getElementById('submission-form').reset();
-                loadUserSubmissions();
-            })
-            .catch(err => showToast(`Submission failed: ${err.message}`, 'error'));
+        database.ref('pendingSubmissions').push(submissionData).then(() => {
+            showToast('Submitted for review!');
+            DOM.submissionModal.classList.remove('active');
+            document.getElementById('submission-form').reset();
+            loadUserSubmissions();
+        }).catch(err => showToast(err.message, 'error'));
     }
-
-    // --- SUBMISSION TYPE TOGGLE ---
+    
     function setupSubmissionTypeToggle() {
-        const contentTypeSelect = document.getElementById('submission-content-type');
-        const embedCode = document.getElementById('submission-embed-code');
-        const downloadLink = document.getElementById('submission-download-link');
-        
-        if (contentTypeSelect) {
-            contentTypeSelect.addEventListener('change', (e) => {
-                const isEmbed = e.target.value === 'embed';
-                embedCode.style.display = isEmbed ? 'block' : 'none';
-                downloadLink.style.display = isEmbed ? 'none' : 'block';
-            });
-        }
-        
-        const updateContentType = document.getElementById('update-content-type');
-        const updateEmbedCode = document.getElementById('update-embed-code');
-        const updateDownloadLink = document.getElementById('update-download-link');
-        
-        if (updateContentType) {
-            updateContentType.addEventListener('change', (e) => {
-                const isEmbed = e.target.value === 'embed';
-                updateEmbedCode.style.display = isEmbed ? 'block' : 'none';
-                updateDownloadLink.style.display = isEmbed ? 'none' : 'block';
-            });
-        }
-    }
-
-    // --- TABS NAVIGATION ---
-    function setupTabs() {
-        DOM.tabBtns.forEach(btn => {
-            btn.addEventListener('click', () => {
-                const tabId = btn.dataset.tab;
-                
-                DOM.tabBtns.forEach(b => b.classList.remove('active'));
-                DOM.tabContents.forEach(c => c.classList.remove('active'));
-                
-                btn.classList.add('active');
-                document.getElementById(`${tabId}-tab`).classList.add('active');
-                
-                if (tabId === 'my-submissions') {
-                    loadUserSubmissions();
-                }
-            });
+        const ct = document.getElementById('submission-content-type');
+        if (ct) ct.addEventListener('change', e => {
+            document.getElementById('submission-embed-code').style.display = e.target.value === 'embed' ? 'block' : 'none';
+            document.getElementById('submission-download-link').style.display = e.target.value === 'embed' ? 'none' : 'block';
+        });
+        const uct = document.getElementById('update-content-type');
+        if (uct) uct.addEventListener('change', e => {
+            document.getElementById('update-embed-code').style.display = e.target.value === 'embed' ? 'block' : 'none';
+            document.getElementById('update-download-link').style.display = e.target.value === 'embed' ? 'none' : 'block';
         });
     }
-
-    // --- EVENT LISTENERS ---
+    
+    function setupTabs() {
+        DOM.tabBtns.forEach(btn => btn.addEventListener('click', () => {
+            const tabId = btn.dataset.tab;
+            DOM.tabBtns.forEach(b => b.classList.remove('active'));
+            DOM.tabContents.forEach(c => c.classList.remove('active'));
+            btn.classList.add('active');
+            document.getElementById(`${tabId}-tab`).classList.add('active');
+            if (tabId === 'my-submissions') loadUserSubmissions();
+        }));
+    }
+    
+    // --- INITIALIZATION ---
     window.addEventListener('DOMContentLoaded', () => {
         checkUserProfile();
         loadItems();
         setupSubmissionTypeToggle();
         setupTabs();
+        setupDownloadTracking(); // FIXED: Initialize download tracking
         
-        // Check for direct item link in URL
-        const urlParams = new URLSearchParams(window.location.search);
-        const itemId = urlParams.get('item');
-        if (itemId) {
-            database.ref('items').once('value', (snapshot) => {
-                allItems = snapshot.val() || {};
-                if (allItems[itemId]) {
-                    setTimeout(() => showItemDetails(itemId), 500);
-                } else {
-                    showToast('App not found', 'error');
-                }
-            });
-        }
+        const urlItem = new URLSearchParams(window.location.search).get('item');
+        if (urlItem) database.ref('items').once('value', s => { if (s.val()?.[urlItem]) setTimeout(() => showItemDetails(urlItem), 500); else showToast('App not found', 'error'); });
         
-        // Modal controls
         DOM.profileBtn.addEventListener('click', () => DOM.profileModal.classList.add('active'));
         DOM.submitBtn.addEventListener('click', openSubmissionForm);
         DOM.logoutBtn.addEventListener('click', logout);
-        
-        document.querySelectorAll('.modal-close').forEach(btn => {
-            btn.addEventListener('click', () => {
-                btn.closest('.modal').classList.remove('active');
-            });
-        });
-
-        // Forms
+        document.querySelectorAll('.modal-close').forEach(btn => btn.addEventListener('click', () => btn.closest('.modal').classList.remove('active')));
         document.getElementById('profile-form').addEventListener('submit', saveProfile);
         document.getElementById('submission-form').addEventListener('submit', handleSubmission);
-
-        // Filtering and Sorting
-        DOM.filterButtons.forEach(button => {
-            button.addEventListener('click', () => {
-                DOM.filterButtons.forEach(btn => btn.classList.remove('active'));
-                button.classList.add('active');
-                currentFilter = button.dataset.filter;
-                renderItems();
-            });
-        });
-        DOM.sortSelect.addEventListener('change', (e) => {
-            currentSort = e.target.value;
+        
+        DOM.filterButtons.forEach(btn => btn.addEventListener('click', () => {
+            DOM.filterButtons.forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            currentFilter = btn.dataset.filter;
             renderItems();
-        });
-        DOM.searchBar.addEventListener('keyup', (e) => {
-            currentSearch = e.target.value.toLowerCase();
-            renderItems();
-        });
-
-        // Notification button
-        document.getElementById('notification-btn').addEventListener('click', () => {
-            showToast('Check "My Submissions" for status updates!', 'info');
-        });
-
-        // Event delegation for dynamic content
+        }));
+        DOM.sortSelect.addEventListener('change', e => { currentSort = e.target.value; renderItems(); });
+        DOM.searchBar.addEventListener('keyup', e => { currentSearch = e.target.value.toLowerCase(); renderItems(); });
+        document.getElementById('notification-btn')?.addEventListener('click', () => showToast('Check "My Submissions" for status updates!', 'info'));
         document.body.addEventListener('click', handleReviewInteraction);
     });
-
     </script>
 </body>
 </html>

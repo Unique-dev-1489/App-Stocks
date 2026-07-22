@@ -217,7 +217,7 @@
     <!-- Modals -->
     <div id="profile-modal" class="modal">
         <div class="modal-content glass-panel">
-            <span class="modal-close">&times;</span>
+            <span class="modal-close">×</span>
             <h2>ðŸ‘¤ Your Profile</h2>
             <p>A profile is required to submit, review, and vote.</p>
             <form id="profile-form">
@@ -231,7 +231,7 @@
 
     <div id="submission-modal" class="modal">
         <div class="modal-content glass-panel">
-            <span class="modal-close">&times;</span>
+            <span class="modal-close">×</span>
             <h2>ðŸ“¤ Submit an App or Game</h2>
             <form id="submission-form">
                 <input type="text" id="submission-title" placeholder="Title" required>
@@ -268,14 +268,14 @@
 
     <div id="item-details-modal" class="modal">
         <div class="modal-content glass-panel">
-            <span class="modal-close">&times;</span>
+            <span class="modal-close">×</span>
             <div id="item-details-content"></div>
         </div>
     </div>
 
     <div id="update-request-modal" class="modal">
         <div class="modal-content glass-panel">
-            <span class="modal-close">&times;</span>
+            <span class="modal-close">×</span>
             <h2>ðŸ”„ Request Update</h2>
             <form id="update-request-form">
                 <input type="hidden" id="update-item-id">
@@ -311,7 +311,7 @@
     <!-- Developer Public Profile Modal -->
     <div id="developer-modal" class="modal">
         <div class="modal-content glass-panel">
-            <span class="modal-close">&times;</span>
+            <span class="modal-close">×</span>
             <div id="developer-profile-content"></div>
         </div>
     </div>
@@ -748,7 +748,7 @@
         if (item.submissionType === 'embed') {
             actionContainer.innerHTML = `<button class="btn btn-primary" id="play-btn">â–¶ Play Now</button>`;
             actionContainer.querySelector('#play-btn').onclick = () => {
-                detailsContent.querySelector('#play-area-container').innerHTML = `<iframe class="item-play-area" srcdoc="${item.embedCode.replace(/"/g, '&quot;')}"></iframe>`;
+                detailsContent.querySelector('#play-area-container').innerHTML = `<iframe class="item-play-area" srcdoc="${item.embedCode.replace(/"/g, '"')}"></iframe>`;
             };
         } else {
             actionContainer.innerHTML = `<a href="${item.downloadLink}" class="btn btn-primary download-btn" data-id="${itemId}" data-url="${item.downloadLink}" target="_blank">ðŸ“¥ Download</a>`;

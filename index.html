@@ -119,14 +119,14 @@
 </head>
 <body>
     <header class="app-header glass-panel">
-        <div class="logo">ðŸ“± App Stocks</div>
+        <div class="logo">📱 App Stocks</div>
         <div class="header-actions">
             <span id="welcome-message" style="margin-right: 20px;"></span>
             <button id="profile-btn" class="btn btn-outline">Profile</button>
             <button id="submit-btn" class="btn btn-primary" style="display: none;">Submit App</button>
             <button id="logout-btn" class="btn btn-outline" style="display: none;">Logout</button>
-            <button id="notification-btn" class="btn btn-outline">ðŸ””</button>
-            <button id="request-dev-btn" class="btn btn-primary" style="display: none;">ðŸ“§ Become Developer</button>
+            <button id="notification-btn" class="btn btn-outline">🔔</button>
+            <button id="request-dev-btn" class="btn btn-primary" style="display: none;">📧 Become Developer</button>
         </div>
     </header>
 
@@ -140,7 +140,7 @@
         <!-- Explore Tab -->
         <div id="explore-tab" class="tab-content active">
             <section class="featured-section">
-                <h2>ðŸ”¥ Featured</h2>
+                <h2>🔥 Featured</h2>
                 <div id="featured-carousel" class="featured-carousel"></div>
             </section>
             <div class="controls-bar glass-panel">
@@ -167,7 +167,7 @@
         <!-- My Submissions Tab (visible only for developers) -->
         <div id="my-submissions-tab" class="tab-content">
             <div class="glass-panel">
-                <h2>ðŸ“ My Submissions</h2>
+                <h2>📝 My Submissions</h2>
                 <div id="my-submissions-list" class="submissions-list"></div>
             </div>
         </div>
@@ -181,7 +181,7 @@
             </div>
             <div id="dev-profile-subtab" class="subtab-content active">
                 <div class="glass-panel">
-                    <h2>ðŸ‘¤ Developer Profile</h2>
+                    <h2>👤 Developer Profile</h2>
                     <form id="developer-profile-form">
                         <input type="text" id="dev-name" placeholder="Developer Name (public)" required>
                         <input type="email" id="dev-email" placeholder="Public Email (optional)">
@@ -203,7 +203,7 @@
             </div>
             <div id="dev-analysis-subtab" class="subtab-content" style="display:none;">
                 <div class="glass-panel">
-                    <h2>ðŸ“Š Your Stats</h2>
+                    <h2>📊 Your Stats</h2>
                     <div id="analysis-stats" style="display:flex; gap:20px; flex-wrap:wrap; margin-bottom:20px;"></div>
                     <div class="chart-container"><canvas id="typeChart"></canvas></div>
                     <div class="chart-container"><canvas id="downloadsChart"></canvas></div>
@@ -217,22 +217,22 @@
     <!-- Modals -->
     <div id="profile-modal" class="modal">
         <div class="modal-content glass-panel">
-            <span class="modal-close">×</span>
-            <h2>ðŸ‘¤ Your Profile</h2>
+            <span class="modal-close">&times;</span>
+            <h2>👤 Your Profile</h2>
             <p>A profile is required to submit, review, and vote.</p>
             <form id="profile-form">
                 <input type="text" id="display-name" placeholder="Display Name" required>
                 <input type="email" id="email-address" placeholder="Email Address" required>
                 <button type="submit" class="btn btn-primary">Save Profile</button>
             </form>
-            <p class="info-text">ðŸ’¡ Want to become a Developer? Send a recommendation email to <strong>nboy13031@gmail.com</strong> and wait 24-48h for approval.</p>
+            <p class="info-text">💡 Want to become a Developer? Send a recommendation email to <strong>nboy13031@gmail.com</strong> and wait 24-48h for approval.</p>
         </div>
     </div>
 
     <div id="submission-modal" class="modal">
         <div class="modal-content glass-panel">
-            <span class="modal-close">×</span>
-            <h2>ðŸ“¤ Submit an App or Game</h2>
+            <span class="modal-close">&times;</span>
+            <h2>📤 Submit an App or Game</h2>
             <form id="submission-form">
                 <input type="text" id="submission-title" placeholder="Title" required>
                 <textarea id="submission-desc" placeholder="Description" rows="4" required></textarea>
@@ -260,7 +260,7 @@
                 <textarea id="submission-embed-code" placeholder="Paste <iframe> or HTML code here" rows="5" style="display:none;"></textarea>
                 <input type="url" id="submission-download-link" placeholder="External Download URL" style="display:none;">
                 <input type="hidden" id="update-of-id">
-                <p class="info-text">â„¹ï¸ To request an update, go to My Submissions and click "Request Update".</p>
+                <p class="info-text">ℹ️ To request an update, go to My Submissions and click "Request Update".</p>
                 <button type="submit" class="btn btn-primary">Submit for Review</button>
             </form>
         </div>
@@ -268,15 +268,15 @@
 
     <div id="item-details-modal" class="modal">
         <div class="modal-content glass-panel">
-            <span class="modal-close">×</span>
+            <span class="modal-close">&times;</span>
             <div id="item-details-content"></div>
         </div>
     </div>
 
     <div id="update-request-modal" class="modal">
         <div class="modal-content glass-panel">
-            <span class="modal-close">×</span>
-            <h2>ðŸ”„ Request Update</h2>
+            <span class="modal-close">&times;</span>
+            <h2>🔄 Request Update</h2>
             <form id="update-request-form">
                 <input type="hidden" id="update-item-id">
                 <input type="text" id="update-title" placeholder="Title" required>
@@ -311,7 +311,7 @@
     <!-- Developer Public Profile Modal -->
     <div id="developer-modal" class="modal">
         <div class="modal-content glass-panel">
-            <span class="modal-close">×</span>
+            <span class="modal-close">&times;</span>
             <div id="developer-profile-content"></div>
         </div>
     </div>
@@ -391,7 +391,7 @@
             if (item) item.downloads = (item.downloads || 0) + 1;
             return item;
         }).then(() => {
-            showToast('ðŸ“¥ Downloaded !', 'info');
+            showToast('📥 Downloaded !', 'info');
             if (downloadUrl) window.open(downloadUrl, '_blank');
         }).catch(() => { if (downloadUrl) window.open(downloadUrl, '_blank'); });
     }
@@ -513,7 +513,7 @@
         }
         arr.forEach(sub => {
             const statusClass = sub.status === 'approved' ? 'status-approved' : (sub.status === 'rejected' ? 'status-rejected' : 'status-pending');
-            const statusText = sub.status === 'approved' ? 'âœ“ Approved' : (sub.status === 'rejected' ? 'âœ— Rejected' : 'â³ Pending Review');
+            const statusText = sub.status === 'approved' ? '✓ Approved' : (sub.status === 'rejected' ? '✗ Rejected' : '⏳ Pending Review');
             const div = document.createElement('div');
             div.className = 'submission-item';
             div.innerHTML = `
@@ -521,11 +521,11 @@
                     <strong>${sub.title}</strong><br>
                     <small>Type: ${sub.type} | Version: ${sub.version || 'N/A'}</small><br>
                     <span class="status-badge ${statusClass}">${statusText}</span>
-                    ${sub.status === 'approved' && sub.publishedData ? `<div class="downloads-count">ðŸ“¥ Downloads: ${sub.publishedData.downloads || 0}</div>` : ''}
+                    ${sub.status === 'approved' && sub.publishedData ? `<div class="downloads-count">📥 Downloads: ${sub.publishedData.downloads || 0}</div>` : ''}
                 </div>
                 <div class="actions">
-                    ${sub.status === 'approved' ? `<button class="btn btn-outline btn-sm request-update-btn" data-id="${sub.id}" data-title="${sub.title}" data-desc="${sub.description}" data-logo="${sub.logoUrl}" data-screenshots="${(sub.screenshots||[]).join(',')}" data-type="${sub.type}" data-version="${sub.version||''}" data-size-mb="${sub.sizeMB||''}" data-size-unit="${sub.sizeUnit||'MB'}" data-submission-type="${sub.submissionType}" data-embed-code="${sub.embedCode||''}" data-download-link="${sub.downloadLink||''}">ðŸ”„ Request Update</button>` : ''}
-                    ${sub.status === 'pending' ? `<button class="btn btn-danger btn-sm cancel-submission-btn" data-id="${sub.id}">âŒ Cancel</button>` : ''}
+                    ${sub.status === 'approved' ? `<button class="btn btn-outline btn-sm request-update-btn" data-id="${sub.id}" data-title="${sub.title}" data-desc="${sub.description}" data-logo="${sub.logoUrl}" data-screenshots="${(sub.screenshots||[]).join(',')}" data-type="${sub.type}" data-version="${sub.version||''}" data-size-mb="${sub.sizeMB||''}" data-size-unit="${sub.sizeUnit||'MB'}" data-submission-type="${sub.submissionType}" data-embed-code="${sub.embedCode||''}" data-download-link="${sub.downloadLink||''}">🔄 Request Update</button>` : ''}
+                    ${sub.status === 'pending' ? `<button class="btn btn-danger btn-sm cancel-submission-btn" data-id="${sub.id}">❌ Cancel</button>` : ''}
                 </div>
             `;
             DOM.mySubmissionsList.appendChild(div);
@@ -618,9 +618,9 @@
                 <div class="item-card-content">
                     <h3 class="item-card-title">${item.title}</h3>
                     <p class="item-card-publisher">by ${item.publisherName}</p>
-                    <div class="item-card-rating"><span class="stars">â˜…â˜…â˜…â˜…â˜…</span><span>${avgRating} (${item.totalRatings || 0})</span></div>
-                    <div class="downloads-count">ðŸ“¥ ${item.downloads || 0} downloads | ðŸ’¾ ${sizeText}</div>
-                    <div class="item-card-actions"><button class="share-btn" data-id="${item.id}">ðŸ”—</button></div>
+                    <div class="item-card-rating"><span class="stars">★★★★★</span><span>${avgRating} (${item.totalRatings || 0})</span></div>
+                    <div class="downloads-count">📥 ${item.downloads || 0} downloads | 💾 ${sizeText}</div>
+                    <div class="item-card-actions"><button class="share-btn" data-id="${item.id}">🔗</button></div>
                 </div>
             `;
             card.addEventListener('click', (e) => {
@@ -656,7 +656,7 @@
         matches.forEach(([email, name]) => {
             const pill = document.createElement('span');
             pill.className = 'developer-suggestion';
-            pill.textContent = `ðŸ‘¤ ${name}`;
+            pill.textContent = `👤 ${name}`;
             pill.addEventListener('click', () => openDeveloperProfile(email));
             DOM.developerSuggestionContainer.appendChild(pill);
         });
@@ -684,7 +684,7 @@
     function copyToClipboard(text) {
         if (navigator.clipboard && window.isSecureContext) {
             navigator.clipboard.writeText(text).then(() => {
-                showToast('ðŸ”— Link copied to clipboard!', 'success');
+                showToast('🔗 Link copied to clipboard!', 'success');
             }).catch(() => {
                 fallbackCopy(text);
             });
@@ -706,7 +706,7 @@
         try {
             const successful = document.execCommand('copy');
             if (successful) {
-                showToast('ðŸ”— Link copied to clipboard!', 'success');
+                showToast('🔗 Link copied to clipboard!', 'success');
             } else {
                 prompt('Copy this link to share:', text);
             }
@@ -733,9 +733,9 @@
                 <div class="item-details-info">
                     <h2>${item.title}</h2>
                     <p>by <span class="developer-link" data-email="${item.publisherEmail}">${item.publisherName}</span></p>
-                    <p>Version: ${item.version || '1.0.0'} | ðŸ’¾ ${sizeText}</p>
-                    <div class="item-card-rating"><span class="stars">â˜…â˜…â˜…â˜…â˜…</span><span>${(item.avgRating || 0).toFixed(1)} (${item.totalRatings || 0})</span></div>
-                    <div class="downloads-count">ðŸ“¥ Total Downloads: ${item.downloads || 0}</div>
+                    <p>Version: ${item.version || '1.0.0'} | 💾 ${sizeText}</p>
+                    <div class="item-card-rating"><span class="stars">★★★★★</span><span>${(item.avgRating || 0).toFixed(1)} (${item.totalRatings || 0})</span></div>
+                    <div class="downloads-count">📥 Total Downloads: ${item.downloads || 0}</div>
                 </div>
             </div>
             <p>${item.description}</p>
@@ -746,14 +746,14 @@
         `;
         const actionContainer = detailsContent.querySelector('#action-buttons-container');
         if (item.submissionType === 'embed') {
-            actionContainer.innerHTML = `<button class="btn btn-primary" id="play-btn">â–¶ Play Now</button>`;
+            actionContainer.innerHTML = `<button class="btn btn-primary" id="play-btn">▶ Play Now</button>`;
             actionContainer.querySelector('#play-btn').onclick = () => {
-                detailsContent.querySelector('#play-area-container').innerHTML = `<iframe class="item-play-area" srcdoc="${item.embedCode.replace(/"/g, '"')}"></iframe>`;
+                detailsContent.querySelector('#play-area-container').innerHTML = `<iframe class="item-play-area" srcdoc="${item.embedCode.replace(/"/g, '&quot;')}"></iframe>`;
             };
         } else {
-            actionContainer.innerHTML = `<a href="${item.downloadLink}" class="btn btn-primary download-btn" data-id="${itemId}" data-url="${item.downloadLink}" target="_blank">ðŸ“¥ Download</a>`;
+            actionContainer.innerHTML = `<a href="${item.downloadLink}" class="btn btn-primary download-btn" data-id="${itemId}" data-url="${item.downloadLink}" target="_blank">📥 Download</a>`;
         }
-        actionContainer.innerHTML += `<button class="btn btn-outline" id="share-details-btn" style="margin-left:10px;">ðŸ”— Share</button>`;
+        actionContainer.innerHTML += `<button class="btn btn-outline" id="share-details-btn" style="margin-left:10px;">🔗 Share</button>`;
         detailsContent.querySelector('#share-details-btn').onclick = (e) => {
             e.preventDefault();
             shareItem(itemId);
@@ -767,7 +767,7 @@
         DOM.itemDetailsModal.classList.add('active');
     }
 
-    // --- DEVELOPER PUBLIC PROFILE (caseâ€‘insensitive) ---
+    // --- DEVELOPER PUBLIC PROFILE (case-insensitive) ---
     async function openDeveloperProfile(email) {
         if (!email) return;
         const emailLower = email.toLowerCase();
@@ -788,12 +788,12 @@
             <div style="text-align:center;">
                 ${devProfile.developerLogo ? `<img src="${devProfile.developerLogo}" style="width:100px;height:100px;border-radius:50%;object-fit:cover;margin-bottom:10px;">` : ''}
                 <h2>${devProfile.developerName || email.split('@')[0]}</h2>
-                ${devProfile.developerEmail && devProfile.showEmail ? `<p>ðŸ“§ ${devProfile.developerEmail}</p>` : ''}
-                ${devProfile.developerNote ? `<p>ðŸ“ ${devProfile.developerNote}</p>` : ''}
+                ${devProfile.developerEmail && devProfile.showEmail ? `<p>📧 ${devProfile.developerEmail}</p>` : ''}
+                ${devProfile.developerNote ? `<p>📝 ${devProfile.developerNote}</p>` : ''}
             </div>
             <hr style="border-color: var(--glass-border);">
-            <p>ðŸ“± Total Apps/Games: ${items.length}</p>
-            <p>ðŸ“¥ Total Downloads: ${totalDownloads}</p>
+            <p>📱 Total Apps/Games: ${items.length}</p>
+            <p>📥 Total Downloads: ${totalDownloads}</p>
             <h3>Published Items:</h3>
             <div class="items-grid" style="grid-template-columns: repeat(auto-fill, minmax(200px,1fr));">
                 ${items.map(item => {
@@ -802,8 +802,8 @@
                         <div class="item-card-logo" style="background-image:url('${item.logoUrl}')"></div>
                         <div class="item-card-content">
                             <h4>${item.title}</h4>
-                            <p>${item.type} Â· ${sizeText}</p>
-                            <p>â­ ${(item.avgRating || 0).toFixed(1)} (${item.totalRatings || 0})</p>
+                            <p>${item.type} · ${sizeText}</p>
+                            <p>★ ${(item.avgRating || 0).toFixed(1)} (${item.totalRatings || 0})</p>
                         </div>
                     </div>`;
                 }).join('')}
@@ -841,12 +841,12 @@
     function renderReviewForm(itemId) {
         const container = document.getElementById('review-form-container');
         if (!container) return;
-        if (!userProfile) { container.innerHTML = '<p>â­ Login to leave a review.</p>'; return; }
+        if (!userProfile) { container.innerHTML = '<p>★ Login to leave a review.</p>'; return; }
         container.innerHTML = `
             <form id="review-form" class="glass-panel">
                 <h4>Leave a Review</h4>
                 <div class="review-form-stars" data-rating="0">
-                    ${[1,2,3,4,5].map(v => `<span data-value="${v}">â˜…</span>`).join('')}
+                    ${[1,2,3,4,5].map(v => `<span data-value="${v}">★</span>`).join('')}
                 </div>
                 <textarea id="review-comment" placeholder="Comment..." rows="3"></textarea>
                 <button type="submit" class="btn btn-primary">Submit</button>
@@ -901,12 +901,12 @@
                 reviewCard.className = 'review-card';
                 reviewCard.innerHTML = `
                     <div class="review-header">
-                        <div><span class="review-author">${review.username}</span> - ${'â˜…'.repeat(review.rating)}${'â˜†'.repeat(5-review.rating)}</div>
+                        <div><span class="review-author">${review.username}</span> - ${'★'.repeat(review.rating)}${'☆'.repeat(5-review.rating)}</div>
                         <div class="review-actions">
-                            <button class="vote-btn" data-type="like" data-item="${itemId}" data-review="${child.key}">ðŸ‘ ${review.likes}</button>
-                            <button class="vote-btn" data-type="dislike" data-item="${itemId}" data-review="${child.key}">ðŸ‘Ž ${review.dislikes}</button>
-                            <button class="reply-btn">ðŸ’¬ Reply</button>
-                            ${userProfile && sanitizeEmail(userProfile.email) === review.userId ? `<button class="delete-review-btn" data-item="${itemId}" data-review="${child.key}" data-rating="${review.rating}">ðŸ—‘ Delete</button>` : ''}
+                            <button class="vote-btn" data-type="like" data-item="${itemId}" data-review="${child.key}">👍 ${review.likes}</button>
+                            <button class="vote-btn" data-type="dislike" data-item="${itemId}" data-review="${child.key}">👎 ${review.dislikes}</button>
+                            <button class="reply-btn">💬 Reply</button>
+                            ${userProfile && sanitizeEmail(userProfile.email) === review.userId ? `<button class="delete-review-btn" data-item="${itemId}" data-review="${child.key}" data-rating="${review.rating}">🗑 Delete</button>` : ''}
                         </div>
                     </div>
                     <p>${review.comment || ''}</p>
